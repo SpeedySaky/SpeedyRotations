@@ -163,6 +163,7 @@ internal class Rotation : IRotation
 		if (Player.IsInCombat || Player.IsMoving) return false;
 		if (Player.IsCasting || Player.IsChanneling) return false;
 		if (Player.HasAura("Drink") || Player.HasAura("Food")) return false;
+		var Target = WoW.Target;
 
 
 

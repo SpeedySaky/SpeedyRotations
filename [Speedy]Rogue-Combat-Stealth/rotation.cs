@@ -1,9 +1,9 @@
-﻿Casting System;
-Casting System.Threading;
-Casting Shadow_WoW;
-Casting Shadow_WoW.Internal;
-Casting Shadow_WoW.Managers;
-Casting Shadow_WoW.Warcraft;
+﻿using System;
+using System.Threading;
+using Shadow_WoW;
+using Shadow_WoW.Internal;
+using Shadow_WoW.Managers;
+using Shadow_WoW.Warcraft;
 
 internal class Rotation : IRotation
 {
