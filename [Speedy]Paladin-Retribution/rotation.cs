@@ -112,7 +112,7 @@ internal class Rotation : IRotation
 
             return true;
         }
-        if (WoW.CanCast("Flash of Light") && Health < 70 && Player.HasAura(59578) || WoW.CanCast("Flash of Light") && Health < 70 && Player.HasAura(53489) )
+        if (WoW.CanCast("Flash of Light") && Player.HasAura(59578) || WoW.CanCast("Flash of Light")  && Player.HasAura(53489) )
         {
             Console.WriteLine("Casting Flash of Light");
             if (WoW.Cast("Flash of Light"))
@@ -215,12 +215,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Crusader Strike"))
                 return true;
         }
-        if (WoW.CanCast("Exorcism"))
-        {
-            Console.WriteLine("Casting Exorcism");
-            if (WoW.Cast("Exorcism"))
-                return true;
-        }
+        
 
 
 
