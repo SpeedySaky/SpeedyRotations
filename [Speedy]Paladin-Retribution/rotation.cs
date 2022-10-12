@@ -94,7 +94,7 @@ internal class Rotation : IRotation
         //healing
 
 
-        if (WoW.CanCast("Lay on Hands") && Health < 15 && WoW.TargetSelf() && !Player.HasAura("Forbearance"))
+        if (WoW.CanCast("Lay on Hands") && Health < 15  && !Player.HasAura("Forbearance"))
         {
             Console.WriteLine("Casting Lay on Hands");
             if (WoW.Cast("Lay on Hands"))
@@ -151,7 +151,7 @@ internal class Rotation : IRotation
                 return true;
         }
         //DPS
-        if (Player.HasAura(59578) || Player.HasAura(53489) && WoW.CanCast("Exorcism") && Health > 75)
+        if (Player.HasAura(59578) && WoW.CanCast("Exorcism") && Health > 75 || Player.HasAura(53489) && WoW.CanCast("Exorcism") && Health > 75)
         {
             Console.WriteLine("Casting Exorcism");
             if (WoW.Cast("Exorcism"))
@@ -179,25 +179,25 @@ internal class Rotation : IRotation
            return true;
         }
        
-        if (WoW.CanCast("Hammer of Justice") && Target.IsCasting | Target.IsChanneling)
+        if (WoW.CanCast("Hammer of Justice") && Target.IsCasting || Target.IsChanneling)
         {
             Console.WriteLine("Casting Hammer of Justice");
             if (WoW.Cast("Hammer of Justice"))
                 return true;
         }
-        if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Consecration"))
+        if (WoW.HostilesNearby(10, true, true) >= 2 && WoW.CanCast("Consecration"))
         {
             Console.WriteLine("Casting Consecration");
             if (WoW.Cast("Consecration"))
                 return true;
         }
-        if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Divine Storm"))
+        if (WoW.HostilesNearby(10, true, true) >= 2 && WoW.CanCast("Divine Storm"))
         {
             Console.WriteLine("Casting Divine Storm");
             if (WoW.Cast("Divine Storm"))
                 return true;
         }
-        if (WoW.Target.Type == uType.Undead && WoW.UnitsFightingMe() >= 2 || WoW.Target.Type == uType.Demon && WoW.UnitsFightingMe() >= 2)
+        if (WoW.Target.Type == uType.Undead && WoW.HostilesNearby(10, true, true) >= 2 || WoW.Target.Type == uType.Demon && WoW.HostilesNearby(10, true, true) >= 2)
         {
             Console.WriteLine("Casting Holy Wrath");
             if (WoW.Cast("Holy Wrath"))
