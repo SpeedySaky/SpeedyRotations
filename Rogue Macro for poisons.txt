@@ -1,0 +1,26 @@
+You can use any poison you want but it requires some editing of the rotation,in rotation is used Instant Poison for both weapons
+You create these macros in character specific macros
+
+
+
+Macro name for mainhand weapon:
+  
+mainhand
+
+Macro code:
+
+#showtooltip
+/use Instant Poison
+/use 16
+
+Macro name for offhand weapon:
+  
+offhand
+
+Macro code:
+
+#showtooltip
+/use Instant Poison
+/use 17
+
+

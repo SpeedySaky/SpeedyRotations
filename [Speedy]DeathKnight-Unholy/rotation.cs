@@ -20,13 +20,13 @@ internal class Rotation : IRotation
         var Health = Player.HealthPercent;
         var Runic = Player.ManaPercent;
         if (Player.IsCasting || Player.IsChanneling) return false;
-
+		string DaD = "Death and Decay";
         var Target = WoW.Target;
         if (Target.IsDead || Target.IsGhost) return false;
 
         var TargetHealth = Target.HealthPercent;
 
-        var Target = WoW.Target;
+       
         if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
             if (!WoW.Pet.Target.Compare(WoW.Me.Target))
                 if (WoW.Trigger("AssistPet"))
@@ -41,7 +41,7 @@ internal class Rotation : IRotation
                 return true;
 
         }
-        if (WoW.CanCast("Icebound Fortitude") && Player.Health <= 30)
+        if (WoW.CanCast("Icebound Fortitude") && Player.Health <= 30 && Runic>=20)
         {
             Console.WriteLine("Casting Icebound Fortitude");
             if (WoW.Cast("Icebound Fortitude"))
@@ -54,13 +54,13 @@ internal class Rotation : IRotation
             if (WoW.Cast("Summon Gargoyle"))
                 return true;
         }
-        if (WoW.CanCast("Bone Shield") && Player.HasAura("Bone Shield")
+        if (WoW.CanCast("Bone Shield") && !Player.HasAura("Bone Shield"))
         {
             Console.WriteLine("Casting Bone Shield");
             if (WoW.Cast("Bone Shield"))
                 return true;
         }
-        if (WoW.CanCast("Blood Tap") && Player.HasAura("Blood Tap")
+        if (WoW.CanCast("Blood Tap") && Player.HasAura("Blood Tap"))
         {
             Console.WriteLine("Casting Blood Tap");
             if (WoW.Cast("Blood Tap"))
@@ -70,6 +70,11 @@ internal class Rotation : IRotation
         {
             Console.WriteLine("Casting Unbreakable Armor");
             if (WoW.Cast("Unbreakable Armor"))
+                return true;
+        }if (WoW.CanCast("Ghoul Frenzy"))
+        {
+            Console.WriteLine("Casting Ghoul Frenzy");
+            if (WoW.Cast("Ghoul Frenzy"))
                 return true;
         }
         if (WoW.CanCast("Empower Rune Weapon") && !Player.IsCasting)
@@ -90,30 +95,47 @@ internal class Rotation : IRotation
             if (WoW.Cast("Mind Freeze"))
                 return true;
         }
-
-        if (WoW.CanCast("Icy Touch") && !Target.HasAura("Frost Fever"))
+		if (WoW.CanCast("Obliterate")&& WoW.UnholyRunes()>=1 && WoW.FrostRunes()>=1 && Target.HasAura("Frost Fever")&& Target.HasAura("Blood Plague"))
+        {
+            Console.WriteLine("Casting Obliterate");
+            if (WoW.Cast("Obliterate"))
+                return true;
+        }
+        if (WoW.CanCast("Icy Touch") && !Target.HasAura("Frost Fever") && WoW.FrostRunes()>=1)
         {
             Console.WriteLine("Casting Icy Touch");
             if (WoW.Cast("Icy Touch"))
                 return true;
         }
-        if (WoW.CanCast("Scourge Strike") && !Target.HasAura("Blood Plague"))
+		if (WoW.CanCast("Blood Strike") && !Target.HasAura("Blood Plague") && WoW.BloodRunes()>=1 )
         {
-            Console.WriteLine("Casting Scourge Strike");
-            if (WoW.Cast("Scourge Strike")) 
+            Console.WriteLine("Casting Blood Strike");
+            if (WoW.Cast("Blood Strike")) 
             return true;
         }
-        if (WoW.CanCast("Plague Strike") && !Target.HasAura("Blood Plague"))
+		if (WoW.CanCast("Plague Strike") && WoW.UnholyRunes()>=1 )
         {
             Console.WriteLine("Casting Plague Strike");
             if (WoW.Cast("Plague Strike"))
             
                 return true;
         }
-        if (WoW.CanCast("Ghoul Frenzy"))
+        if (WoW.CanCast("Scourge Strike") && Health >65 && !Target.HasAura("Blood Plague")&& WoW.UnholyRunes()>=1 && WoW.FrostRunes()>=1)
         {
-            Console.WriteLine("Casting Ghoul Frenzy");
-            if (WoW.Cast("Ghoul Frenzy"))
+            Console.WriteLine("Casting Scourge Strike");
+            if (WoW.Cast("Scourge Strike")) 
+            return true;
+        }
+        if (WoW.CanCast("Death Strike") && Health <60 && WoW.UnholyRunes()>=1 && WoW.FrostRunes()>=1)
+        {
+            Console.WriteLine("Casting Death Strike");
+            if (WoW.Cast("Death Strike")) 
+            return true;
+        }
+        if (WoW.CanCast("Obliterate")&& WoW.UnholyRunes()>=1 && WoW.FrostRunes()>=1)
+        {
+            Console.WriteLine("Casting Obliterate");
+            if (WoW.Cast("Obliterate"))
                 return true;
         }
         if (WoW.CanCast("Blood Strike") && !Target.HasAura("Desolation"))
@@ -122,7 +144,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Blood Strike"))
                 return true;
         }
-        if (WoW.CanCast("Blood Strike"))
+        if (WoW.CanCast("Blood Strike") && WoW.BloodRunes()>=1)
         {
             Console.WriteLine("Casting Blood Strike");
             if (WoW.Cast("Blood Strike"))
@@ -134,12 +156,20 @@ internal class Rotation : IRotation
             if (WoW.Cast("Death Coil"))
                 return true;
         }
-        if (WoW.CanCast("Death and Decay"))
+         if (Player.IsCasting && !Player.IsChanneling)
         {
-            Console.WriteLine("Casting Death and Decay");
-            if (WoW.Cast("Death and Decay"))
-                return true;
-
+            if (WoW.CanCast(DaD))
+            {
+                if (WoW.SpellInRange(DaD))
+                {
+                    //For casting on top of player
+                    if (WoW.Cast(DaD, Player.Position))
+                    {
+                        return true;
+                    }
+                   
+                }
+            }
         }
         if (WoW.HostilesNearby(10, true, true) >= 2 && WoW.CanCast("Pestilence"))
         {
@@ -148,7 +178,7 @@ internal class Rotation : IRotation
                 return true;
 
         }
-        if (WoW.CanCast("Army of the Dead") && !Player.IsCasting && WoW.SpellOnCooldown("Army of the Dead") WoW.HostilesNearby(10, true, true) >= 2)
+        if (WoW.CanCast("Army of the Dead") && !Player.IsCasting && WoW.SpellOnCooldown("Army of the Dead") &&WoW.HostilesNearby(10, true, true) >= 2)
         {
             Console.WriteLine("Casting Army of the Dead");
             if (WoW.Cast("Army of the Dead"))
@@ -186,6 +216,12 @@ internal class Rotation : IRotation
             if (WoW.Cast("Raise Dead"))
                 return true;
         }
+		if (WoW.CanCast("Death Grip"))
+        {
+            Console.WriteLine("Casting Death Grip");
+            if (WoW.Cast("Death Grip"))
+                return true;
+        }
         if (WoW.CanCast("Rune Tap") && Health <= 80)
         {
             Console.WriteLine("Casting Rune Tap");
@@ -203,9 +239,14 @@ internal class Rotation : IRotation
             Console.WriteLine("Casting Unholy Presence");
             if (WoW.Cast("Unholy Presence"))
                 return true;
-        }
+        }if (!Target.IsDead || !Target.IsGhost) return false;
         WoW.StartPetAttack();
-        if (Target.IsDead || Target.IsGhost) return false;
+		if (WoW.CanCast("Death Grip"))
+        {
+            Console.WriteLine("Casting Death Grip");
+            if (WoW.Cast("Death Grip"))
+                return true;
+        }
         return false;
     }
 
