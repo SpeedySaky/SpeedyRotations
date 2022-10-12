@@ -112,7 +112,7 @@ internal class Rotation : IRotation
 
             return true;
         }
-        if (WoW.CanCast("Flash of Light") && Player.HasAura(59578) || WoW.CanCast("Flash of Light")  && Player.HasAura(53489) )
+        if (WoW.CanCast("Flash of Light") && Player.HasAura(59578) && Health < 75 || WoW.CanCast("Flash of Light")  && Player.HasAura(53489) && Health < 75)
         {
             Console.WriteLine("Casting Flash of Light");
             if (WoW.Cast("Flash of Light"))
