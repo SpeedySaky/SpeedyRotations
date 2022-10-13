@@ -10,8 +10,8 @@ internal class Rotation : IRotation
 
     public override void Initialize()
     {
-        QuickDelay = 50;
-        SlowDelay = 800;
+        QuickDelay = 100;
+        SlowDelay = 400;
     }
 
     public override bool InCombat()
@@ -23,7 +23,10 @@ internal class Rotation : IRotation
 		string DaD = "Death and Decay";
         var Target = WoW.Target;
         if (Target.IsDead || Target.IsGhost) return false;
-
+		var Blood = WoW.BloodRunes();
+		var Unholy = WoW.UnholyRunes();		
+		var Frost = WoW.FrostRunes();
+		var Death = WoW.DeathRunes();
         var TargetHealth = Target.HealthPercent;
 
        
@@ -32,12 +35,19 @@ internal class Rotation : IRotation
                 if (WoW.Trigger("AssistPet"))
                     if (WoW.Me.Target.Compare(WoW.Pet.Target))
                         return true;
-        WoW.StartAttack();
-        WoW.StartPetAttack();
+        
+		
         if (WoW.CanCast("Death Pact") && WoW.IsValid(WoW.Pet) && Player.Health <= 10)
         {
             Console.WriteLine("Casting Death Pact");
             if (WoW.Cast("Death Pact"))
+                return true;
+
+        }
+		if (WoW.CanCast("Icebound Fortitude") && Health <= 30 && Runic>=20)
+        {
+            Console.WriteLine("Casting Icebound Fortitude");
+            if (WoW.Cast("Icebound Fortitude"))
                 return true;
 
         }
@@ -58,12 +68,11 @@ internal class Rotation : IRotation
                 return true;
         
         }
-        if (WoW.CanCast("Icebound Fortitude") && Player.Health <= 30 && Runic>=20)
+        if (WoW.CanCast("Lifeblood") && Health <=50)
         {
-            Console.WriteLine("Casting Icebound Fortitude");
-            if (WoW.Cast("Icebound Fortitude"))
+            Console.WriteLine("Casting Lifeblood");
+            if (WoW.Cast("Lifeblood"))
                 return true;
-
         }
         if (WoW.CanCast("Summon Gargoyle") && !Player.IsCasting )
         {
@@ -100,11 +109,13 @@ internal class Rotation : IRotation
             if (WoW.Cast("Empower Rune Weapon"))
                 return true;
         }
-		if (WoW.CanCast("Death Coil") && Runic>60)
+		
+		if (WoW.CanCast("Death Strike") && Health <=60 && Unholy>=1 && Frost>=1 && Target.HasAura("Frost Fever")&& Target.HasAura("Blood Plague"))
         {
-            Console.WriteLine("Casting Death Coil");
-            if (WoW.Cast("Death Coil"))
-                return true;
+            Console.WriteLine("Casting Death Strike");
+            if (WoW.Cast("Death Strike")) 
+			
+            return true;
         }
         if (WoW.CanCast("Strangulate") && Target.IsCasting || Target.IsChanneling)
         {
@@ -118,39 +129,40 @@ internal class Rotation : IRotation
             if (WoW.Cast("Mind Freeze"))
                 return true;
         }
-		if (WoW.CanCast("Obliterate")&& WoW.UnholyRunes()>=1 && WoW.FrostRunes()>=1 && Target.HasAura("Frost Fever")&& Target.HasAura("Blood Plague"))
+		if (WoW.CanCast("Obliterate") && Target.HasAura("Frost Fever")&& Target.HasAura("Blood Plague")&& Unholy>=1 && Frost>=1  || Death>=1 && Frost>=1|| Death>=1 && Unholy>=1)
         {
             Console.WriteLine("Casting Obliterate");
             if (WoW.Cast("Obliterate"))
                 return true;
         }
-        if (WoW.CanCast("Icy Touch") && !Target.HasAura("Frost Fever") && WoW.FrostRunes()>=1)
+		if (WoW.CanCast("Death Coil") && Runic>60)
+        {
+            Console.WriteLine("Casting Death Coil");
+            if (WoW.Cast("Death Coil"))
+                return true;
+        }
+        if (WoW.CanCast("Icy Touch") && !Target.HasAura("Frost Fever") && Frost>=1 ||Death>=1  )
         {
             Console.WriteLine("Casting Icy Touch");
             if (WoW.Cast("Icy Touch"))
                 return true;
         }
 		
-		if (WoW.CanCast("Plague Strike") && WoW.UnholyRunes()>=1 )
+		if (WoW.CanCast("Plague Strike")&& !Target.HasAura("Blood Plague") && Unholy>=1 ||Death>=1)
         {
             Console.WriteLine("Casting Plague Strike");
             if (WoW.Cast("Plague Strike"))
             
                 return true;
         }
-        if (WoW.CanCast("Scourge Strike") && Health >65 && !Target.HasAura("Blood Plague")&& WoW.UnholyRunes()>=1 && WoW.FrostRunes()>=1)
+        if (WoW.CanCast("Scourge Strike") && Health >=65 && !Target.HasAura("Blood Plague")&& Unholy>=1 && Frost>=1 ||Death>=1 && Unholy>=1||Death>=1 && Frost>=1)
         {
             Console.WriteLine("Casting Scourge Strike");
             if (WoW.Cast("Scourge Strike")) 
             return true;
         }
-        if (WoW.CanCast("Death Strike") && Health <60 && WoW.UnholyRunes()>=1 && WoW.FrostRunes()>=1)
-        {
-            Console.WriteLine("Casting Death Strike");
-            if (WoW.Cast("Death Strike")) 
-            return true;
-        }
-		if (WoW.CanCast("Blood Strike") && !Target.HasAura("Blood Plague") && WoW.BloodRunes()>=1 )
+        
+		if (WoW.CanCast("Blood Strike")  && Death>=1 )
         {
             Console.WriteLine("Casting Blood Strike");
             if (WoW.Cast("Blood Strike")) 
