@@ -270,14 +270,10 @@ internal class Rotation : IRotation
        
 
 
-        if (WoW.CanCast("Retribution Aura") && WoW.CanCast("Devotion Aura") && !Player.HasAura("Retribution Aura") && !Player.HasAura("Devotion Aura"))
+        if (WoW.CanCast("Crusader Aura") && !Player.HasAura("Crusader Aura"))
         {
-            Console.WriteLine("Casting Retribution Aura");
-            if (WoW.Cast("Retribution Aura")) ;
-            else
-                Console.WriteLine("Casting Devotion Aura");
-            if (WoW.Cast("Devotion Aura"))
-
+            Console.WriteLine("Crusader Aura");
+            if (WoW.Cast("Crusader Aura"))
                 return true;
         }
 
@@ -294,12 +290,6 @@ internal class Rotation : IRotation
 
     public override bool WhileMounted()
     {
-        var Player = WoW.Me;
-        if (WoW.CanCast("Crusader Aura") && !Player.HasAura("Crusader Aura"))
-        {
-            if (WoW.Cast("Crusader Aura"))
-                return true;
-        }
-        return false;
+         return false;
     }
 }
