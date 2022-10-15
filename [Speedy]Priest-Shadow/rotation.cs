@@ -87,7 +87,7 @@ internal class Rotation : IRotation
         var TargetHealth = Target.HealthPercent;
 
         //healing
-        
+
 
         if (WoW.CanCast("Renew") && Health < 90 && !Player.HasAura("Renew") && Mana >= 10)
         {
@@ -95,14 +95,14 @@ internal class Rotation : IRotation
             if (WoW.Cast("Renew"))
                 return true;
         }
-        
-		if (WoW.CanCast("Greater Heal") && Health <= 45 && Mana >= 20)
+
+        if (WoW.CanCast("Greater Heal") && Health <= 45 && Mana >= 20)
         {
             Console.WriteLine("Casting Greater Heal");
             if (WoW.Cast("Greater Heal"))
                 return true;
         }
-		if (WoW.CanCast("Lesser Heal") && Health <= 45 && WoW.Me.Level <= 10)
+        if (WoW.CanCast("Lesser Heal") && Health <= 45 && WoW.Me.Level <= 10)
         {
             Console.WriteLine("Casting Lesser Heal");
             if (WoW.Cast("Lesser Heal"))
@@ -134,7 +134,7 @@ internal class Rotation : IRotation
                 return true;
         }
 
-       
+
         //combat
 
 
@@ -219,7 +219,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Smite"))
                 return true;
         }
-        if (!Player.IsCasting && WoW.CanCast("Smite")  && Mana >= 10 && WoW.Me.Level <= 5)
+        if (!Player.IsCasting && WoW.CanCast("Smite") && Mana >= 10 && WoW.Me.Level <= 5)
         {
             Console.WriteLine("Casting Smite low lvl");
             if (WoW.Cast("Smite"))
@@ -232,13 +232,13 @@ internal class Rotation : IRotation
                 return true;
         }
 
-        if (WoW.CanCast("Shoot")&&  WoW.Me.Level >= 6)
+        if (WoW.CanCast("Shoot") && WoW.Me.Level >= 6)
         {
             Console.WriteLine("Casting Shoot");
             if (WoW.Cast("Shoot"))
                 return true;
         }
-		
+
 
         return false;
     }
@@ -301,7 +301,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Inner Fire"))
                 return true;
         }
-       
+
         if (Target.IsDead || Target.IsGhost) return false;
 
 

@@ -5,6 +5,7 @@ using Shadow_WoW.Internal;
 using Shadow_WoW.Managers;
 using Shadow_WoW.Warcraft;
 
+
 internal class Rotation : IRotation
 {
 
