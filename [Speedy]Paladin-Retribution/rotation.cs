@@ -209,7 +209,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Hammer of Wrath"))
                 return true;
         }
-        if (WoW.CanCast("Crusader Strike") && Mana > 50)
+        if (WoW.CanCast("Crusader Strike") && Mana > 50 && !WoW.SpellOnCooldown("Crusader Strike"))
         {
             Console.WriteLine("Casting Crusader Strike");
             if (WoW.Cast("Crusader Strike"))
@@ -246,30 +246,13 @@ internal class Rotation : IRotation
                     return true;
             }
         }
-        if (WoW.CanCast("Blessing of Might") && !Player.HasAura("Blessing of Might"))
-        {
-            Console.WriteLine("Casting Blessing of Might");
-            if (WoW.Cast("Blessing of Might"))
-                return true;
-        }
+        
         if (WoW.CanCast("Gift of the Naaru") && Health <= 40)
         {
             Console.WriteLine("Casting Gift of the Naaru");
             if (WoW.Cast("Gift of the Naaru"))
                 return true;
         }
-        if (WoW.CanCast("Seal of Command") && !Player.HasAura("Seal of Command"))
-        {
-            Console.WriteLine("Casting Seal of Command");
-            if (WoW.Cast("Seal of Command")) ;
-            else
-                Console.WriteLine("Casting Seal of Righteousness");
-            if (WoW.Cast("Seal of Righteousness"))
-                return true;
-        }
-       
-
-
         if (WoW.CanCast("Crusader Aura") && !Player.HasAura("Crusader Aura"))
         {
             Console.WriteLine("Crusader Aura");
