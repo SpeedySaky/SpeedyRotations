@@ -66,19 +66,19 @@ internal class Rotation : IRotation
 
         //cat form
         WoW.StartAttack();
-        if (!Player.HasAura("Cat Form"))
+        if (!Player.HasAura("Cat Form") && WoW.CanCast("Cat Form") )
         {
             Console.WriteLine("Casting Cat Form");
             if (WoW.Cast("Cat Form"))
                 return true;
         }
-        if (WoW.CanCast("Maim") && (Target.IsCasting || Target.IsChanneling))
+        if (WoW.CanCast("Maim")&& Player.HasAura("Cat Form") && (Target.IsCasting || Target.IsChanneling))
         {
             Console.WriteLine("Casting Maim");
             if (WoW.Cast("Maim"))
                 return true;
         }
-        if (Energy >= 60 && WoW.CanCast("Berserk") && !Player.HasAura("Tiger's Fury") && !Player.HasAura("Berserk") && TargetHealth >= 50)
+        if (Energy >= 60 && WoW.CanCast("Berserk") && !Player.HasAura("Tiger's Fury") && !Player.HasAura("Berserk") && TargetHealth >= 50 && Player.HasAura("Cat Form"))
         {
             Console.WriteLine("Casting Berserk");
             if (WoW.Cast("Berserk"))
@@ -92,13 +92,13 @@ internal class Rotation : IRotation
                 return true;
         }
 
-        if (WoW.CanCast("Savage Roar") && !Player.HasAura("Savage Roar") && Points >= 2 && Target.HealthPercent >= 40)
+        if (WoW.CanCast("Savage Roar") && !Player.HasAura("Savage Roar") && Points >= 2 && Target.HealthPercent >= 40 && Player.HasAura("Cat Form"))
         {
             Console.WriteLine("Casting Savage Roar");
             if (WoW.Cast("Savage Roar"))
                 return true;
         }
-        if (Energy >= 30 && WoW.CanCast("Tiger's Fury") && !Player.HasAura("Tiger's Fury") && !Player.HasAura("Berserk") && TargetHealth >= 50)
+        if (Energy >= 30 && WoW.CanCast("Tiger's Fury") && !Player.HasAura("Tiger's Fury") && !Player.HasAura("Berserk") && TargetHealth >= 50 && Player.HasAura("Cat Form"))
         {
             Console.WriteLine("Casting Tiger's Fury");
             if (WoW.Cast("Tiger's Fury"))
@@ -123,13 +123,13 @@ internal class Rotation : IRotation
             if (WoW.Cast("Ferocious Bite"))
                 return true;
         }
-        if (Energy >= 45 && WoW.CanCast("Mangle (Cat)") && Points < 5 && Player.HasAura("Cat Form"))
+        if (Energy >= 45 && WoW.CanCast("Mangle (Cat)") && Points < 5 && Player.HasAura("Cat Form") && !Target.HasAura("Mangle (Cat)"))
         {
             Console.WriteLine("Casting Mangle (Cat)");
             if (WoW.Cast("Mangle (Cat)"))
                 return true;
         }
-        if (Energy >= 45 && WoW.CanCast("Claw") && Points < 5 && Player.HasAura("Cat Form") && Player.Level < 50)
+        if (Energy >= 45 && WoW.CanCast("Claw") && Points < 5 && Player.HasAura("Cat Form") )
         {
             Console.WriteLine("Casting Claw");
             if (WoW.Cast("Claw"))
@@ -151,12 +151,15 @@ internal class Rotation : IRotation
 
         //bear form
 
-        if (!Player.HasAura("Bear Form") && !Player.HasAura("Dire Bear Form") && WoW.CanCast("Bear Form") && WoW.CanCast("Dire Bear Form") && Mana >= 35 && !Player.HasAura("Cat Form"))
+        if (!Player.HasAura("Bear Form") && WoW.CanCast("Bear Form") && Mana >= 35 && !Player.HasAura("Cat Form"))
         {
             Console.WriteLine("Casting Bear Form");
-            if (WoW.Cast("Bear Form")) ;
-            else
-                Console.WriteLine("Casting Dire Bear Form");
+            if (WoW.Cast("Bear Form"))
+            return true;
+        }
+		 if (!Player.HasAura("Bear Form") && !Player.HasAura("Dire Bear Form") && WoW.CanCast("Dire Bear Form") && Mana >= 35 && !Player.HasAura("Cat Form"))
+        {
+            Console.WriteLine("Casting Dire Bear Form");
             if (WoW.Cast("Dire Bear Form"))
                 return true;
         }
@@ -167,36 +170,41 @@ internal class Rotation : IRotation
             if (WoW.Cast("Faerie Fire (Feral)"))
                 return true;
         }
-
-        if (Energy > 35 && WoW.CanCast("Lacerate") && !Target.HasAura("Lacerate") && Target.HealthPercent >= 30 && Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form"))
+		if (WoW.CanCast("Enrage") && Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form"))
+        {
+            Console.WriteLine("Casting Enrage");
+            if (WoW.Cast("Enrage"))
+                return true;
+        }
+        if (Energy > 35 && WoW.CanCast("Lacerate") && !Target.HasAura("Lacerate") && Target.HealthPercent >= 30 && Player.HasAura("Bear Form")&& !Player.HasAura("Cat Form") || Player.HasAura("Dire Bear Form"))
         {
             Console.WriteLine("Casting Lacerate");
             if (WoW.Cast("Lacerate"))
                 return true;
         }
 
-        if (Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form") && WoW.CanCast("Demoralizing Roar") && !Target.HasAura("Demoralizing Roar") && !WoW.CanCast("Cat Form") && !Player.HasAura("Cat Form"))
+        if (Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form") && WoW.CanCast("Demoralizing Roar") && !Target.HasAura("Demoralizing Roar")&& !Player.HasAura("Cat Form"))
         {
             Console.WriteLine("Casting Demoralizing Roar");
             if (WoW.Cast("Demoralizing Roar"))
                 return true;
         }
 
-        if (Health < 60 && Mana > 60 && WoW.CanCast("Survival Instincts") && Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form") && !Player.HasAura("Survival Instincts"))
+        if (Health < 60 && Mana > 60 && WoW.CanCast("Survival Instincts") && Player.HasAura("Bear Form") && !Player.HasAura("Cat Form")|| Player.HasAura("Dire Bear Form"))
         {
             Console.WriteLine("Casting Survival Instincts");
             if (WoW.Cast("Survival Instincts"))
                 return true;
         }
 
-        if (WoW.CanCast("Frenzied Regeneration") && Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form") && Player.HasAura("Survival Instincts"))
+        if (WoW.CanCast("Frenzied Regeneration") && Player.HasAura("Bear Form")&& !Player.HasAura("Cat Form") && Health<=50 || Player.HasAura("Dire Bear Form") && Player.HasAura("Survival Instincts"))
         {
             Console.WriteLine("Casting Frenzied Regeneration");
             if (WoW.Cast("Frenzied Regeneration"))
                 return true;
         }
 
-        if (Health < 60 && Mana > 60 && WoW.CanCast("Barkskin"))
+        if (Health < 60 && Mana > 60 && WoW.CanCast("Barkskin")&& !Player.HasAura("Cat Form")&& Player.HasAura("Bear Form")|| Player.HasAura("Dire Bear Form"))
         {
             Console.WriteLine("Casting Barkskin");
             if (WoW.Cast("Barkskin"))
@@ -209,7 +217,7 @@ internal class Rotation : IRotation
                 return true;
         }
 
-        if (Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form") && WoW.HostilesNearby(40, true, true) >= 2 && WoW.CanCast("Swipe") && !Player.HasAura("Cat Form"))
+        if (Player.HasAura("Bear Form") || Player.HasAura("Dire Bear Form") && WoW.HostilesNearby(10, true, true) >= 2 && WoW.CanCast("Swipe") && !Player.HasAura("Cat Form"))
         {
             Console.WriteLine("Casting Swipe");
             if (WoW.Cast("Swipe"))
