@@ -29,7 +29,12 @@ internal class Rotation : IRotation
 		var Death = WoW.DeathRunes();
         var TargetHealth = Target.HealthPercent;
 
-       
+       if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.CanCast("Raise Dead"))
+        {
+            Console.WriteLine("Casting Raise Dead");
+            if (WoW.Cast("Raise Dead"))
+                return true;
+        }
         if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
             if (!WoW.Pet.Target.Compare(WoW.Me.Target))
                 if (WoW.Trigger("AssistPet"))
@@ -74,7 +79,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Lifeblood"))
                 return true;
         }
-        if (WoW.CanCast("Summon Gargoyle") && !Player.IsCasting )
+        if (WoW.CanCast("Summon Gargoyle") && !Player.IsCasting && Runic>=60 )
         {
             Console.WriteLine("Casting Summon Gargoyle");
             if (WoW.Cast("Summon Gargoyle"))

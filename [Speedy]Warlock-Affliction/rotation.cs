@@ -96,7 +96,7 @@ internal class Rotation : IRotation
                 return true;
         }
         //rotation
-		if (WoW.CanCast("Life Tap") && Health > 90 && Mana < 80)
+		if (WoW.CanCast("Life Tap") && Health > 80 && Mana < 80)
         {
             Console.WriteLine("Casting Life Tap");
             if (WoW.Cast("Life Tap"))
@@ -162,14 +162,14 @@ internal class Rotation : IRotation
                 return true;
         }
 
-        if (WoW.CanCast("Drain Life") && !Player.IsCasting && Health <= 50 && !Player.IsCasting && Mana >= 10)
+        if (WoW.CanCast("Drain Life") && !Player.IsCasting && Health <= 70 && !Player.IsCasting && Mana >= 10)
         {
             Console.WriteLine("Casting Drain Life");
             if (WoW.Cast("Drain Life"))
                 return true;
 
         }
-        if (WoW.CanCast("Soul Fire") && !Player.IsCasting && TargetHealth > 20 && !WoW.HasItem("Soul Shard") && Mana >= 10)
+        if (WoW.CanCast("Soul Fire") && !Player.IsCasting && TargetHealth > 20 && WoW.HasItem("Soul Shard") && Mana >= 10 && WoW.ItemCount("Soul Shard") >= 2)
         {
             Console.WriteLine("Casting Soul Fire");
             if (WoW.Cast("Soul Fire"))
