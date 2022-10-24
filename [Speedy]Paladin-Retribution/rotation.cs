@@ -102,7 +102,7 @@ internal class Rotation : IRotation
         }
 
 
-        if (WoW.CanCast("Blessing of Might") && !Player.HasAura("Blessing of Might") && !Player.HasAura("Hand of Protection") && !Player.HasAura("Divine Protection"))
+        if (WoW.CanCast("Blessing of Might") && !Player.HasAura("Blessing of Might") && !Player.HasAura("Hand of Protection") && !Player.HasAura("Divine Protection") && !Player.HasAura("Greater Blessing of Might") && !Player.HasAura("Battle Shout"))
         {
             Console.WriteLine("Casting Blessing of Might");
             if (WoW.Cast("Blessing of Might")) ;
@@ -125,6 +125,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Divine Protection"))
                 return true;
         }
+		
         if (Player.HasAura("Divine Protection") && Health <= 50 && WoW.CanCast("Holy Light"))
         {
             Console.WriteLine("Casting Holy Light");
@@ -148,6 +149,12 @@ internal class Rotation : IRotation
         {
             Console.WriteLine("Casting Holy Light");
             if (WoW.Cast("Holy Light"))
+                return true;
+        }
+		  if (WoW.CanCast("Divine Plea") && !WoW.SpellOnCooldown("Divine Plea") && Mana <= 20 && Health >=70)
+        {
+            Console.WriteLine("Casting Divine Plea");
+            if (WoW.Cast("Divine Plea"))
                 return true;
         }
         //DPS
@@ -273,6 +280,12 @@ internal class Rotation : IRotation
 
     public override bool WhileMounted()
     {
+		 if (WoW.CanCast("Aura Mastery") && !WoW.SpellOnCooldown("Aura Mastery") && Player.HasAura("Crusader Aura"))
+        {
+        Console.WriteLine("Casting Aura Mastery");
+        if (WoW.Cast("Aura Mastery"))
+            return true;
+        }
          return false;
     }
 }
