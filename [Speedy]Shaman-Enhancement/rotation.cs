@@ -126,6 +126,12 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Feral Spirit"))
 				return true;
 		}
+		if (WoW.CanCast("Wind Shear") && Target.IsCasting || Target.IsChanneling)
+		{
+			Console.WriteLine("Casting Wind Shear");
+			if (WoW.Cast("Wind Shear"))
+				return true;
+		}
 
 		if (!WoW.IsActiveTotem("Stoneskin Totem", false) && !WoW.IsActiveTotem("Stoneskin Totem II", false) && !WoW.IsActiveTotem("Stoneskin Totem III", false) && !WoW.IsActiveTotem("Stoneskin Totem IV", false) && !WoW.IsActiveTotem("Stoneskin Totem V", false) && !WoW.IsActiveTotem("Stoneskin Totem VI", false) && !WoW.IsActiveTotem("Stoneskin Totem VII", false) && !WoW.IsActiveTotem("Stoneskin Totem VIII", false) && !WoW.IsActiveTotem("Stoneskin Totem IX", false) && !WoW.IsActiveTotem("Stoneskin Totem X", false) && !WoW.IsActiveTotem("Stoneclaw Totem", false) && !WoW.IsActiveTotem("Stoneclaw Totem II", false) && !WoW.IsActiveTotem("Stoneclaw Totem III", false) && !WoW.IsActiveTotem("Stoneclaw Totem IV", false) && !WoW.IsActiveTotem("Stoneclaw Totem V", false) && !WoW.IsActiveTotem("Stoneclaw Totem VI", false) && !WoW.IsActiveTotem("Stoneclaw Totem VII", false) && !WoW.IsActiveTotem("Stoneclaw Totem VIII", false) && !WoW.IsActiveTotem("Stoneclaw Totem IX", false) && !WoW.IsActiveTotem("Stoneclaw Totem X", false))
 		{
@@ -253,7 +259,7 @@ internal class Rotation : IRotation
 				return true;
 		}
 		if (Target.IsDead || Target.IsGhost) return false;
-		if (WoW.CanCast("Ghost Wolf") && !Player.HasAura("Ghost Wolf") && Mana > 30)
+		if (WoW.CanCast("Ghost Wolf") && !Player.HasAura("Ghost Wolf") && Mana > 50)
 		{
 			Console.WriteLine("Casting Ghost Wolf");
 			if (WoW.Cast("Ghost Wolf"))
