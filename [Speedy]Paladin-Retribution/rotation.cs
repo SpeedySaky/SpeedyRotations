@@ -280,6 +280,10 @@ internal class Rotation : IRotation
 
     public override bool WhileMounted()
     {
+		
+        var Player = WoW.Me;
+        var Health = Player.HealthPercent;
+        var Mana = Player.ManaPercent;
 		 if (WoW.CanCast("Aura Mastery") && !WoW.SpellOnCooldown("Aura Mastery") && Player.HasAura("Crusader Aura"))
         {
         Console.WriteLine("Casting Aura Mastery");
