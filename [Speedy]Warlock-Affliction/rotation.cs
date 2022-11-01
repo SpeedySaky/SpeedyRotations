@@ -29,13 +29,19 @@ internal class Rotation : IRotation
         var PetHealth = Pet.HealthPercent;
         var TargetHealth = Target.HealthPercent;
 
-        if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
-            if (!WoW.Pet.Target.Compare(WoW.Me.Target))
-                if (WoW.Trigger("AssistPet"))
-                    if (WoW.Me.Target.Compare(WoW.Pet.Target))
-                        return true;
+        //if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
+        //  if (!WoW.Pet.Target.Compare(WoW.Me.Target))
+        //    if (WoW.Trigger("AssistPet"))
+        //      if (WoW.Me.Target.Compare(WoW.Pet.Target))
+        //        return true;
+
 
         WoW.StartPetAttack();
+        if (Player.Target.ToString() == null && Pet.Target.ToString() != null)
+        {
+            WoW.TargetPet();
+            WoW.AssistTarget();
+        }
 
         // healing
         if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10)
@@ -203,11 +209,19 @@ internal class Rotation : IRotation
         var Pet = WoW.Pet;
         var PetHealth = Pet.HealthPercent;
         var Target = WoW.Target;
-        if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
-            if (!WoW.Pet.Target.Compare(WoW.Me.Target))
-                if (WoW.Trigger("AssistPet"))
-                    if (WoW.Me.Target.Compare(WoW.Pet.Target))
-                        return true;
+        //if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
+        //  if (!WoW.Pet.Target.Compare(WoW.Me.Target))
+        //    if (WoW.Trigger("AssistPet"))
+        //      if (WoW.Me.Target.Compare(WoW.Pet.Target))
+        //return true;
+
+        
+        WoW.StartPetAttack();
+        if(Player.Target.ToString() == null && Pet.Target.ToString() != null)
+        {
+            WoW.TargetPet();
+            WoW.AssistTarget();
+        }
 
 
 
