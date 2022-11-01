@@ -167,13 +167,14 @@ internal class Rotation : IRotation
         if (WoW.CanCast("Seal of Command") && !Player.HasAura("Seal of Command"))
         {
             Console.WriteLine("Casting Seal of Command");
-            if (WoW.Cast("Seal of Command")) ;
-
-            else
-                Console.WriteLine("Casting Seal of Righteousness");
-            if (WoW.Cast("Seal of Righteousness"))
-
-                return true;
+            if (WoW.Cast("Seal of Command")) 
+            return true;
+        }
+		if (WoW.CanCast("Seal of Righteousness") && !Player.HasAura("Seal of Command")&& !Player.HasAura("Seal of Righteousness"))
+        {
+            Console.WriteLine("Casting Seal of Righteousness");
+            if (WoW.Cast("Seal of Righteousness")) 
+			    return true;
         }
         
         if (WoW.CanCast("Judgement of Wisdom") && !Target.HasAura("Judgement of Wisdom") && !WoW.SpellOnCooldown("Judgement of Wisdom"))
