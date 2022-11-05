@@ -12,7 +12,7 @@ internal class Rotation : IRotation
 
     public override void Initialize()
     {
-        QuickDelay = 150;
+        QuickDelay = 250;
         SlowDelay = 650;
     }
 
@@ -31,10 +31,28 @@ internal class Rotation : IRotation
         var Target = WoW.Target;
         var TargetHealth = Target.HealthPercent;
         var TargetDistance = Target.Position.Distance3D(Player.Position);
-
+		
         if (Target.IsDead || Target.IsGhost) return false;
 
-
+		if (WoW.CanCast("Rejuvenation") && Health <= 60 && !Player.HasAura("Rejuvenation"))
+        {
+            Console.WriteLine("Casting Rejuvenation");
+            if (WoW.Cast("Rejuvenation"))
+                return true;
+        }
+        if (WoW.CanCast("Regrowth") && Health <= 40 && !Player.HasAura("Regrowth"))
+        {
+            Console.WriteLine("Casting Regrowth" );
+            if (WoW.Cast("Regrowth"))
+                return true;
+        }
+        if (WoW.CanCast("Healing Touch") && Health <= 30)
+        {
+            Console.WriteLine("Casting Healing Touch" );
+            if (WoW.Cast("Healing Touch"))
+                return true;
+        }
+		
         if (!Player.HasAura("Innervate") && WoW.CanCast("Innervate") && Mana <= 30)
         {
             Console.WriteLine("Casting Innervate");
@@ -58,13 +76,23 @@ internal class Rotation : IRotation
             if (WoW.Cast("Faerie Fire"))
                 return true;
         }
-        if (WoW.CanCast("Force of Nature"))
-        {
-            Console.WriteLine("Casting Force of Nature" );
-
-            if (WoW.Cast("Force of Nature"))
-                return true;
-        }
+		
+	
+            if (WoW.CanCast("Force of Nature"))
+            {
+                if (WoW.SpellInRange("Force of Nature"))
+                {                  
+                    
+                    
+                    if (WoW.Cast("Force of Nature",Player.Position))
+                    {
+                        return true;
+                    }
+                }
+            }
+        
+        
+       
         if (WoW.CanCast("Starfall"))
         {
             Console.WriteLine("Casting Starfall" );
@@ -106,7 +134,7 @@ internal class Rotation : IRotation
         {
             Console.WriteLine("Casting Wrath");
 
-            if (WoW.Cast("Wrath")) ;
+            if (WoW.Cast("Wrath")); 
             else
                 Console.WriteLine("Casting Starfire" );
 
@@ -124,6 +152,7 @@ internal class Rotation : IRotation
         var Mana = Player.ManaPercent;
         var Target = WoW.Target;
         var Health = Player.HealthPercent;
+		
         var TargetDistance = Target.Position.Distance3D(Player.Position);
         var TargetHealth = Target.HealthPercent;
         if (Player.IsDead || Player.IsGhost || Player.IsCasting || Player.IsMounted) return false;
