@@ -15,8 +15,8 @@ internal class Rotation : IRotation
 	public override void Initialize()
 
 	{
-		QuickDelay = 150;
-		SlowDelay = 550;
+		QuickDelay = 50;
+		SlowDelay = 200;
 	}
 
 	public override bool InCombat()
@@ -32,6 +32,26 @@ internal class Rotation : IRotation
 		if (Player.HasAura("Drink") || Player.HasAura("Food")) return false;
 		if (Target.IsDead || Target.IsGhost) return false;
 
+
+		if (Player.Target.ToString() == null && Pet.Target.ToString() != null)
+        {
+            WoW.TargetPet();
+            WoW.AssistTarget();
+        }
+
+        WoW.StartPetAttack();
+		if (Player.HasAura(57761) ||Player.HasAura("Fireball!"))
+		{
+			Console.WriteLine("Casting Frostfire Bolt");
+			if (WoW.Cast("Frostfire Bolt"))
+				return true;
+		}
+		if (WoW.HasItem("Mana Sapphire") && Mana <= 50 && !WoW.ItemOnCooldown("Mana Sapphire"))
+		{
+			Console.WriteLine("Using Mana Sapphire");
+			if (WoW.Use("Mana Sapphire"))
+				return true;
+		}
 		if (WoW.HasItem("Mana Emerald") && Mana <= 50 && !WoW.ItemOnCooldown("Mana Emerald"))
 		{
 			Console.WriteLine("Using Mana Emerald");
@@ -62,13 +82,43 @@ internal class Rotation : IRotation
 			if (WoW.Use("Mana Agate"))
 				return true;
 		}
-
+		if (WoW.CanCast("Frostbolt")  && !Target.HasAura("Frostbolt"))
+		{
+			Console.WriteLine("Casting Frostbolt");
+			if (WoW.Cast("Frostbolt"))
+				return true;
+		}
 		if ((Target.IsCasting || Target.IsChanneling) && WoW.CanCast("Counterspell"))
 		{
 			Console.WriteLine("Casting Counterspell");
 			if (WoW.Cast("Counterspell"))
 				return true;
 		}
+		if (WoW.CanCast("Icy Veins") && !WoW.SpellOnCooldown("Icy Veins"))
+		{
+			Console.WriteLine("Casting Icy Veins");
+			if (WoW.Cast("Icy Veins"))
+				return true;
+		}
+		if (WoW.CanCast("Deep Freeze") && Target.HasAura("Frozen"))
+		{
+			Console.WriteLine("Casting Deep Freeze");
+			if (WoW.Cast("Deep Freeze"))
+				return true;
+		}
+		if (WoW.CanCast("Mirror Image") && !WoW.SpellOnCooldown("Mirror Image"))
+		{
+			Console.WriteLine("Casting Mirror Image");
+			if (WoW.Cast("Mirror Image"))
+				return true;
+		}
+		if (WoW.CanCast("Cold Snap") && WoW.SpellOnCooldown("Ice Barrier") && Health <35)
+		{
+			Console.WriteLine("Casting Cold Snap");
+			if (WoW.Cast("Cold Snap"))
+				return true;
+		}
+		
 		if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Frost Nova") && TargetDistance <= 10)
 		{
 			Console.WriteLine("Casting Frost Nova");
@@ -118,6 +168,7 @@ internal class Rotation : IRotation
 				return true;
 		}
 
+		
 		if (WoW.CanCast("Fire Blast") && TargetHealth <= 30)
 		{
 			Console.WriteLine("Casting Fire Blast");
@@ -125,13 +176,13 @@ internal class Rotation : IRotation
 				return true;
 		}
 
-		if (WoW.CanCast("Frostbolt") && Mana >= 10 && TargetHealth >= 20 && !Target.HasAura("Frostbolt"))
+		if (WoW.CanCast("Frostbolt")  && !Target.HasAura("Frostbolt"))
 		{
 			Console.WriteLine("Casting Frostbolt");
 			if (WoW.Cast("Frostbolt"))
 				return true;
 		}
-		if (WoW.CanCast("Fireball") && Mana >= 10 && TargetHealth >= 30)
+		if (WoW.CanCast("Fireball")&& WoW.Me.Level <= 19 && Mana >= 10 && TargetHealth >= 30 )
 		{
 			Console.WriteLine("Casting Fireball");
 			if (WoW.Cast("Fireball"))
@@ -143,7 +194,7 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Cold Snap"))
 				return true;
 		}
-		if (WoW.CanCast("Shoot"))
+		if (WoW.CanCast("Shoot") && Target.Health <=15)
 		{
 			Console.WriteLine("Casting Shoot");
 			if (WoW.Cast("Shoot"))
@@ -164,35 +215,53 @@ internal class Rotation : IRotation
 		if (Player.IsCasting || Player.IsChanneling) return false;
 		if (Player.HasAura("Drink") || Player.HasAura("Food")) return false;
 		var Target = WoW.Target;
+		var Pet = WoW.Pet;
 
-
-
+		WoW.StartPetAttack();
+		if (WoW.CanCast("Arcane Intellect") && !Player.HasAura("Arcane Intellect"))
+		{
+			Console.WriteLine("Buffing Arcane Intellect");
+			if (WoW.Cast("Arcane Intellect"))
+				return true;
+		}
+		if (WoW.CanCast("Conjure Refreshment") && !WoW.HasItem("Conjured Mana Strudel") )
+		{
+			Console.WriteLine("Conjuring Food");
+			if (WoW.Cast("Conjure Refreshment"))
+				return true;
+		}
 		if (WoW.CanCast("Conjure Food") && !WoW.HasItem("Conjured Croissant") && !WoW.HasItem("Conjured Cinnamon Roll") && !WoW.HasItem("Conjured Sweet Roll") && !WoW.HasItem("Conjured Sourdough") && !WoW.HasItem("Conjured Pumpernickel") && !WoW.HasItem("Conjured Rye") && !WoW.HasItem("Conjured Bread") &&
-		!WoW.HasItem("Conjured Muffin"))
+		!WoW.HasItem("Conjured Muffin") && !WoW.HasItem("Conjured Muffin") && !WoW.HasItem("Conjured Mana Strudel"))
 		{
 			Console.WriteLine("Conjuring Food");
 			if (WoW.Cast("Conjure Food"))
 				return true;
 		}
 
-		if (!WoW.HasItem("Conjured Fresh Water") && !WoW.HasItem("Conjured Glacier Water") && !WoW.HasItem("Conjured Mountain Spring Water") && !WoW.HasItem("Conjured Crystal Water") && !WoW.HasItem("Conjured Sparkling Water") && !WoW.HasItem("Conjured Mineral Water") && !WoW.HasItem("Conjured Spring Water") && !WoW.HasItem("Conjured Purified Water") && !WoW.HasItem("Conjured Water"))
+		if (!WoW.HasItem("Conjured Fresh Water") && !WoW.HasItem("Conjured Glacier Water") && !WoW.HasItem("Conjured Mountain Spring Water") && !WoW.HasItem("Conjured Crystal Water") && !WoW.HasItem("Conjured Sparkling Water") && !WoW.HasItem("Conjured Mineral Water") && !WoW.HasItem("Conjured Spring Water") && !WoW.HasItem("Conjured Purified Water") && !WoW.HasItem("Conjured Mana Strudel"))
 		{
 			Console.WriteLine("Conjuring Water");
 			if (WoW.Cast("Conjure Water"))
 				return true;
 		}
 
-
-		if (WoW.CanCast("Frost Armor") && !Player.HasAura("Frost Armor"))
+		if (WoW.CanCast("Molten Armor") && !Player.HasAura("Molten Armor"))
+		{
+			Console.WriteLine("Buffing Molten Armor");
+			if (WoW.Cast("Molten Armor"))
+				return true;
+		}
+		if (WoW.CanCast("Frost Armor") && !Player.HasAura("Molten Armor") && !Player.HasAura("Frost Armor") )
 		{
 			Console.WriteLine("Buffing Frost Armor");
 			if (WoW.Cast("Frost Armor"))
 				return true;
 		}
-		if (WoW.CanCast("Arcane Intellect") && !Player.HasAura("Arcane Intellect"))
+		
+		if (WoW.CanCast("Dampen Magic") && !Player.HasAura("Dampen Magic"))
 		{
-			Console.WriteLine("Buffind Arcane Intellect");
-			if (WoW.Cast("Arcane Intellect"))
+			Console.WriteLine("Buffing Dampen Magic");
+			if (WoW.Cast("Dampen Magic"))
 				return true;
 		}
 		if (WoW.CanCast("Evocation") && Mana < 15)
@@ -201,7 +270,13 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Evocation"))
 				return true;
 		}
-		if (WoW.CanCast("Conjure Mana Emerald") && !WoW.HasItem("Mana Emerald"))
+		if (WoW.CanCast("Conjure Mana Sapphire") && !WoW.HasItem("Mana Sapphire"))
+		{
+			Console.WriteLine("Conjuring Mana Sapphire");
+			if (WoW.Cast("Conjure Mana Sapphire"))
+				return true;
+		}
+		if (WoW.CanCast("Conjure Mana Emerald") && !WoW.HasItem("Mana Emerald") && !WoW.HasItem("Mana Sapphire"))
 		{
 			Console.WriteLine("Conjuring Mana Emerald");
 			if (WoW.Cast("Conjure Mana Emerald"))
