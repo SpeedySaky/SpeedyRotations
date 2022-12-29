@@ -32,12 +32,10 @@ internal class Rotation : IRotation
             if (WoW.Cast("Overpower") && Rage >= 5)
                 return true;
         }
-        if (WoW.CanCast("Victory Rush"))
+        if (WoW.CanCast("Victory Rush") && Player.HasAura(32216))
         {
             Console.WriteLine("Casting Victory Rush");
-            if (WoW.Cast("Victory Rush")) ;
-            else
-            if (WoW.Cast("Heroic Strike"))
+            if (WoW.Cast("Victory Rush"))             
                 return true;
         }
         if (WoW.CanCast("Berseker Stance") && !Player.HasAura("Berserker Stance"))
@@ -59,6 +57,12 @@ internal class Rotation : IRotation
                 return true;
         }
         if (WoW.CanCast("Execute") && TargetHealth <= 20 && Rage >= 15)
+        {
+            Console.WriteLine("Casting Execute");
+            if (WoW.Cast("Execute"))
+                return true;
+        }
+		if (WoW.CanCast("Execute")  && Player.HasAura("Sudden Death") && Rage >= 15)
         {
             Console.WriteLine("Casting Execute");
             if (WoW.Cast("Execute"))
