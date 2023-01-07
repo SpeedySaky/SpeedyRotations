@@ -68,6 +68,10 @@ internal class Rotation : IRotation
     "Seething Plague",
     "Death's Door",
     "Plague Strike",
+	"Storm Punch",
+	"Paralytic Poison",
+	"Poison",
+	"Boiling Blood"
 };
     public override bool InCombat()
     {
@@ -78,7 +82,17 @@ internal class Rotation : IRotation
         var Target = WoW.Target;
         if (Target.IsDead || Target.IsGhost) return false;
         var TargetHealth = Target.HealthPercent;
-        
+        var auras = Player.Auras();
+        foreach (var aura in auras)
+        {
+            if (Dispels.Contains(WoW.C__Spell.Name(aura.SpellID)) || WoW.SpellDispel(aura.SpellID) == uDispelType.Disease || WoW.SpellDispel(aura.SpellID) == uDispelType.Poison && WoW.CanCast("Purify"))
+
+            {
+                Console.WriteLine("Casting Purify");
+                if (WoW.Cast("Purify"))
+                    return true;
+            }
+        }
 
         if (WoW.CanCast("Retribution Aura") && !Player.HasAura("Retribution Aura") )
         {
@@ -261,7 +275,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Gift of the Naaru"))
                 return true;
         }
-        if (WoW.CanCast("Crusader Aura") && !Player.HasAura("Crusader Aura"))
+        if (WoW.CanCast("Crusader Aura") && !Player.HasAura("Crusader Aura") && Player.IsMounted)
         {
             Console.WriteLine("Crusader Aura");
             if (WoW.Cast("Crusader Aura"))
