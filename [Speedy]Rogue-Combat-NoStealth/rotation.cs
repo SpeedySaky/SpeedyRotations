@@ -11,7 +11,7 @@ internal class Rotation : IRotation
 
     public override void Initialize()
     {
-        QuickDelay = 150;
+        QuickDelay = 350;
         SlowDelay = 750;
     }
 
@@ -150,24 +150,27 @@ internal class Rotation : IRotation
         var Energy = Player.Energy;
         var Combo = Player.ComboPoints;
         var Target = WoW.Target;
-        if (Player.IsDead || Player.IsGhost || Player.IsCasting) return false;
-        var TargetDistance = Target.Position.Distance3D(Player.Position);
+		if (Player.IsDead || Player.IsGhost) return false;
+        if (Player.IsInCombat || Player.IsMoving) return false;
+        if (Player.IsCasting || Player.IsChanneling) return false;
         if (Player.HasAura("Drink") || Player.HasAura("Food")) return false;
+        var TargetDistance = Target.Position.Distance3D(Player.Position);
+        
 
-
-        if (!WoW.IsEnchanted(uItemSlot.MainHand) && WoW.HasItem("Instant Poison") || !WoW.IsEnchanted(uItemSlot.MainHand) && WoW.HasItem("Instant Poison II") || !WoW.IsEnchanted(uItemSlot.MainHand) && WoW.HasItem("Instant Poison III") || !WoW.IsEnchanted(uItemSlot.MainHand) && WoW.HasItem("Instant Poison IV") || !WoW.IsEnchanted(uItemSlot.MainHand) && WoW.HasItem("Instant Poison V") || !WoW.IsEnchanted(uItemSlot.MainHand) && WoW.HasItem("Instant Poison VI") || !WoW.IsEnchanted(uItemSlot.MainHand) && WoW.HasItem("Instant Poison VII"))
-        {
-            Console.WriteLine("Enchanting Mainhand");
-            if (WoW.Trigger("mainhand"))
-                return true;
-        }
-
-        if (!WoW.IsEnchanted(uItemSlot.OffHand) && WoW.HasItem("Instant Poison") || !WoW.IsEnchanted(uItemSlot.OffHand) && WoW.HasItem("Instant Poison II") || !WoW.IsEnchanted(uItemSlot.OffHand) && WoW.HasItem("Instant Poison III") || !WoW.IsEnchanted(uItemSlot.OffHand) && WoW.HasItem("Instant Poison IV") || !WoW.IsEnchanted(uItemSlot.OffHand) && WoW.HasItem("Instant Poison V") || !WoW.IsEnchanted(uItemSlot.OffHand) && WoW.HasItem("Instant Poison VI") || !WoW.IsEnchanted(uItemSlot.OffHand) && WoW.HasItem("Instant Poison VII"))
+ if (WoW.HasItem("Instant Poison VI") && !WoW.HasEnchantment(uItemSlot.OffHand, "Instant"))
         {
             Console.WriteLine("Enchanting Offhand");
             if (WoW.Trigger("offhand"))
                 return true;
         }
+        if (WoW.HasItem("Instant Poison VI") && !WoW.HasEnchantment(uItemSlot.MainHand, "Instant") )
+        {
+           Console.WriteLine("Enchanting Mainhand");
+            if (WoW.Trigger("mainhand"))
+                return true;
+        }
+
+       
 
         if (WoW.CanCast("Sprint"))
         {
