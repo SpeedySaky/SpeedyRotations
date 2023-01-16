@@ -275,6 +275,12 @@ internal class Rotation : IRotation
             if (WoW.Cast("Gift of the Naaru"))
                 return true;
         }
+		if (WoW.CanCast("Devotion Aura") && !Player.HasAura("Devotion Aura") && Player.Level<12)
+        {
+            Console.WriteLine("Devotion Aura");
+            if (WoW.Cast("Devotion Aura"))
+                return true;
+        }
         if (WoW.CanCast("Crusader Aura") && !Player.HasAura("Crusader Aura") && Player.IsMounted)
         {
             Console.WriteLine("Crusader Aura");
