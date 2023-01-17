@@ -10,8 +10,8 @@ internal class Rotation : IRotation
 
     public override void Initialize()
     {
-        QuickDelay = 250;
-        SlowDelay = 750;
+        QuickDelay = 350;
+        SlowDelay = 850;
     }
 
     public override bool InCombat()
@@ -28,31 +28,51 @@ internal class Rotation : IRotation
         var Pet = WoW.Pet;
         var PetHealth = Pet.HealthPercent;
         var TargetHealth = Target.HealthPercent;
+		if (WoW.IsValid(Pet))
+		{
+			if (!Pet.Target.IsEmpty())
+			{
+			if (Player.Target.IsEmpty())
+            WoW.StartPetAttack();
+			}
+			else
+			{
+			if (Player.IsInCombat || Player.PetInCombat)
+            if (!WoW.Pet.Target.Compare(Player.Target))
+                if (WoW.TryTarget(Pet.Target))
+                    return true;
+			}
+		}
 
-        //if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
-        //  if (!WoW.Pet.Target.Compare(WoW.Me.Target))
-        //    if (WoW.Trigger("AssistPet"))
-        //      if (WoW.Me.Target.Compare(WoW.Pet.Target))
-        //        return true;
-
-
-        WoW.StartPetAttack();
+        
         if (Player.Target.ToString() == null && Pet.Target.ToString() != null)
         {
             WoW.TargetPet();
             WoW.AssistTarget();
         }
 
+        WoW.StartPetAttack();
         // healing
-        if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10)
+		
+		  if (!WoW.IsValid(WoW.Pet)&& WoW.HasSpell("Summon Felguard") && WoW.Me.Level >= 50|| WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10 && WoW.HasSpell("Summon Voidwalker"))
         {
-            Console.WriteLine("Casting Summon Felguard");
+            			Console.WriteLine("Casting Summon Felguard");
+
             if (WoW.Cast("Summon Felguard")) ;
             else
-                Console.WriteLine("Casting Summon Voidwalker");
+                				Console.WriteLine("Casting Summon Voidwalker");
+
             if (WoW.Cast("Summon Voidwalker"))
                 return true;
         }
+        if (WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && !WoW.IsValid(WoW.Pet) || WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") &&WoW.Pet.IsDead && WoW.Me.Level <= 10)
+        {
+							Console.WriteLine("Casting Summon Imp");
+
+            if (WoW.Cast("Summon Imp"))
+                return true;
+        }
+        
         if (WoW.HasItem("Fel Healthstone") && Health <= 50 && !WoW.ItemOnCooldown("Fel Healthstone"))
         {
             Console.WriteLine("Using Fel Healthstone");
@@ -101,14 +121,14 @@ internal class Rotation : IRotation
             if (WoW.Use("Lesser Healthstone"))
                 return true;
         }
-        //rotation
+       // rotation
 		if (WoW.CanCast("Life Tap") && Health > 80 && Mana < 80)
         {
             Console.WriteLine("Casting Life Tap");
             if (WoW.Cast("Life Tap"))
                 return true;
         }
-		if (WoW.CanCast("Haunt") && !Target.HasAura("Haunt"))
+		if (WoW.CanCast("Haunt") && !Target.HasAura("Haunt")&& TargetHealth >= 30)
         {
             Console.WriteLine("Casting Haunt");
             if (WoW.Cast("Haunt"))
@@ -154,6 +174,12 @@ internal class Rotation : IRotation
                 return true;
 
         }
+		if (WoW.CanCast("Soul Fire") && !Player.IsCasting && TargetHealth > 50 && WoW.HasItem("Soul Shard") && Mana >= 10 && WoW.ItemCount("Soul Shard") >= 2)
+        {
+            Console.WriteLine("Casting Soul Fire");
+            if (WoW.Cast("Soul Fire"))
+                return true;
+        }
         if (WoW.CanCast("Health Funnel") && !Player.IsCasting && PetHealth <= 50 && !Pet.HasAura("Health Funnel"))
         {
             Console.WriteLine("Casting Health Funnel");
@@ -175,19 +201,20 @@ internal class Rotation : IRotation
                 return true;
 
         }
-        if (WoW.CanCast("Soul Fire") && !Player.IsCasting && TargetHealth > 20 && WoW.HasItem("Soul Shard") && Mana >= 10 && WoW.ItemCount("Soul Shard") >= 2)
-        {
-            Console.WriteLine("Casting Soul Fire");
-            if (WoW.Cast("Soul Fire"))
-                return true;
-        }
+        
         if (WoW.CanCast("Shadow Bolt") && !Player.IsCasting && TargetHealth >= 70 && Mana >= 50 && WoW.Me.Level < 12)
         {
             Console.WriteLine("Casting Shadow Bolt");
             if (WoW.Cast("Shadow Bolt"))
                 return true;
         }
-        if (WoW.CanCast("Shoot") && !Player.IsCasting)
+		  if (WoW.CanCast("Shadow Bolt")&& WoW.Me.Level  < 5)
+        {
+            Console.WriteLine("Casting Shadow Bolt");
+            if (WoW.Cast("Shadow Bolt"))
+                return true;
+        }
+        if (WoW.CanCast("Shoot") && !Player.IsCasting && TargetHealth <20 || Mana <10)
         {
             Console.WriteLine("Casting Casting Shoot");
             if (WoW.Cast("Shoot"))
@@ -209,14 +236,31 @@ internal class Rotation : IRotation
         var Pet = WoW.Pet;
         var PetHealth = Pet.HealthPercent;
         var Target = WoW.Target;
-        //if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
-        //  if (!WoW.Pet.Target.Compare(WoW.Me.Target))
-        //    if (WoW.Trigger("AssistPet"))
-        //      if (WoW.Me.Target.Compare(WoW.Pet.Target))
-        //return true;
-
+       
+		if (WoW.IsValid(Pet))
+		{
+			if (!Pet.Target.IsEmpty())
+			{
+			if (Player.Target.IsEmpty())
+            WoW.StartPetAttack();
+			}
+			else
+			{
+			if (Player.IsInCombat || Player.PetInCombat)
+            if (!WoW.Pet.Target.Compare(Player.Target))
+                if (WoW.TryTarget(Pet.Target))
+                    return true;
+			}
+		}
+		
+		WoW.StartPetAttack();
+			if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
+          
+            if (WoW.Trigger("AssistPet"))
+            
+               return true;
         
-        WoW.StartPetAttack();
+        
         if(Player.Target.ToString() == null && Pet.Target.ToString() != null)
         {
             WoW.TargetPet();
@@ -263,18 +307,21 @@ internal class Rotation : IRotation
         }
 
 
-        if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10)
+        if (!WoW.IsValid(WoW.Pet)&& WoW.HasSpell("Summon Felguard") && WoW.Me.Level >= 50|| WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10 && WoW.HasSpell("Summon Voidwalker"))
         {
-            Console.WriteLine("Casting Summon Felguard");
+            			Console.WriteLine("Casting Summon Felguard");
+
             if (WoW.Cast("Summon Felguard")) ;
             else
-                Console.WriteLine("Casting Summon Voidwalker");
+                				Console.WriteLine("Casting Summon Voidwalker");
+
             if (WoW.Cast("Summon Voidwalker"))
                 return true;
         }
-        if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.CanCast("Summon Imp") && WoW.Me.Level <= 10)
+        if (WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && !WoW.IsValid(WoW.Pet) || WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") &&WoW.Pet.IsDead && WoW.Me.Level <= 10)
         {
-            Console.WriteLine("Casting Summon Imp");
+							Console.WriteLine("Casting Summon Imp");
+
             if (WoW.Cast("Summon Imp"))
                 return true;
         }
