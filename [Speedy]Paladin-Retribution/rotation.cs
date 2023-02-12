@@ -71,7 +71,8 @@ internal class Rotation : IRotation
 	"Storm Punch",
 	"Paralytic Poison",
 	"Poison",
-	"Boiling Blood"
+	"Boiling Blood",
+	"Leech Poison"
 };
     public override bool InCombat()
     {
@@ -94,11 +95,15 @@ internal class Rotation : IRotation
             }
         }
 
-        if (WoW.CanCast("Retribution Aura") && !Player.HasAura("Retribution Aura") )
+        if (WoW.HasSpell("Retribution Aura") && !Player.HasAura("Retribution Aura")  )
         {
             Console.WriteLine("Casting Retribution Aura");
             if (WoW.Cast("Retribution Aura")) ;
-            else
+           return true;
+		   }
+		
+		if (WoW.CanCast("Devotion Aura") && !Player.HasAura("Retribution Aura") && !Player.HasAura("Devotion Aura"))
+ {
                 Console.WriteLine("Casting Devotion Aura");
             if (WoW.Cast("Devotion Aura"))
 
@@ -116,14 +121,10 @@ internal class Rotation : IRotation
         }
 
 
-        if (WoW.CanCast("Blessing of Might") && !Player.HasAura("Blessing of Might") && !Player.HasAura("Hand of Protection") && !Player.HasAura("Divine Protection") && !Player.HasAura("Greater Blessing of Might") && !Player.HasAura("Battle Shout"))
+        if (WoW.CanCast("Blessing of Might") && !Player.HasAura("Blessing of Might") && !Player.HasAura("Hand of Protection") && !Player.HasAura("Divine Protection") && !Player.HasAura("Greater Blessing of Might"))
         {
             Console.WriteLine("Casting Blessing of Might");
             if (WoW.Cast("Blessing of Might")) ;
-            else
-                Console.WriteLine("Casting Blessing of Wisdom");
-            if (WoW.Cast("Blessing of Wisdom")) ;
-
             return true;
         }
         if (WoW.CanCast("Flash of Light") && Player.HasAura(59578) && Health < 75 || WoW.CanCast("Flash of Light")  && Player.HasAura(53489) && Health < 75)
@@ -190,14 +191,18 @@ internal class Rotation : IRotation
             if (WoW.Cast("Seal of Righteousness")) 
 			    return true;
         }
-        
-        if (WoW.CanCast("Judgement of Wisdom") && !Target.HasAura("Judgement of Wisdom") && !WoW.SpellOnCooldown("Judgement of Wisdom"))
+        if (WoW.CanCast("Judgement of Light") && !Target.HasAura("Judgement of Light") &&  !WoW.HasSpell("Judgement of Wisdom"))
+        {
+            Console.WriteLine("Casting Judgement of Light");
+            if (WoW.Cast("Judgement of Light")) ;
+            
+           return true;
+        }
+        if (WoW.CanCast("Judgement of Wisdom") && !Target.HasAura("Judgement of Wisdom") &&  WoW.Me.Level >= 12)
         {
             Console.WriteLine("Casting Judgement of Wisdom");
             if (WoW.Cast("Judgement of Wisdom")) ;
-            else
-                Console.WriteLine("Casting Judgement of Light");
-            if (WoW.Cast("Judgement of Light"))
+            
            return true;
         }
        
@@ -273,12 +278,6 @@ internal class Rotation : IRotation
         {
             Console.WriteLine("Casting Gift of the Naaru");
             if (WoW.Cast("Gift of the Naaru"))
-                return true;
-        }
-		if (WoW.CanCast("Devotion Aura") && !Player.HasAura("Devotion Aura") && Player.Level<12)
-        {
-            Console.WriteLine("Devotion Aura");
-            if (WoW.Cast("Devotion Aura"))
                 return true;
         }
         if (WoW.CanCast("Crusader Aura") && !Player.HasAura("Crusader Aura") && Player.IsMounted)

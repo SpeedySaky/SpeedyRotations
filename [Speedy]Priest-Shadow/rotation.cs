@@ -89,39 +89,39 @@ internal class Rotation : IRotation
         //healing
 
 
-        if (WoW.CanCast("Renew") && Health < 90 && !Player.HasAura("Renew") && Mana >= 10)
+        if (WoW.CanCast("Renew") && Health < 90 && !Player.HasAura("Renew") && Mana >= 10 && !Player.HasAura("Shadowform"))
         {
             Console.WriteLine("Casting Renew");
             if (WoW.Cast("Renew"))
                 return true;
         }
 
-        if (WoW.CanCast("Greater Heal") && Health <= 45 && Mana >= 20)
+        if (WoW.CanCast("Greater Heal") && Health <= 45 && Mana >= 20 && !Player.HasAura("Shadowform"))
         {
             Console.WriteLine("Casting Greater Heal");
             if (WoW.Cast("Greater Heal"))
                 return true;
         }
-        if (WoW.CanCast("Lesser Heal") && Health <= 45 && WoW.Me.Level <= 10)
+        if (WoW.CanCast("Lesser Heal") && Health <= 45 && WoW.Me.Level <= 10 && !Player.HasAura("Shadowform"))
         {
             Console.WriteLine("Casting Lesser Heal");
             if (WoW.Cast("Lesser Heal"))
                 return true;
         }
-        if (WoW.CanCast("Flash Heal") && Health <= 60 && Mana >= 20)
+        if (WoW.CanCast("Flash Heal") && Health <= 60 && Mana >= 20 && !Player.HasAura("Shadowform"))
         {
             Console.WriteLine("Casting Flash Heal");
             if (WoW.Cast("Flash Heal"))
                 return true;
         }
-        if (WoW.CanCast("Heal") && Health <= 65 && Mana >= 20)
+        if (WoW.CanCast("Heal") && Health <= 65 && Mana >= 20 && !Player.HasAura("Shadowform"))
         {
             Console.WriteLine("Casting Heal");
             if (WoW.Cast("Heal"))
                 return true;
         }
 
-        if (WoW.CanCast("Desperate Prayer") && Health < 40)
+        if (WoW.CanCast("Desperate Prayer") && Health < 40 && !Player.HasAura("Shadowform"))
         {
             Console.WriteLine("Casting Desperate Prayer");
             if (WoW.Cast("Desperate Prayer"))
@@ -262,7 +262,12 @@ internal class Rotation : IRotation
                     return true;
             }
         }
-
+		 if (WoW.CanCast("Shadowform") && !Player.HasAura("Shadowform") && Mana >= 20)
+        {
+            Console.WriteLine("Casting Shadowform");
+            if (WoW.Cast("Shadowform"))
+                return true;
+        }
         if (!Player.HasAura("Renew") && Health <= 80)
         {
             Console.WriteLine("Casting Renew");

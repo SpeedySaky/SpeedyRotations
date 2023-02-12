@@ -182,6 +182,7 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Frostbolt"))
 				return true;
 		}
+		
 		if (WoW.CanCast("Fireball")&& WoW.Me.Level <= 19 && Mana >= 10 && TargetHealth >= 30 )
 		{
 			Console.WriteLine("Casting Fireball");
@@ -194,7 +195,13 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Cold Snap"))
 				return true;
 		}
-		if (WoW.CanCast("Shoot") && Target.Health <=15)
+		if (WoW.CanCast("Frostbolt") )
+		{
+			Console.WriteLine("Casting Frostbolt");
+			if (WoW.Cast("Frostbolt"))
+				return true;
+		}
+		if (WoW.CanCast("Shoot") && Mana<10)
 		{
 			Console.WriteLine("Casting Shoot");
 			if (WoW.Cast("Shoot"))
@@ -238,7 +245,7 @@ internal class Rotation : IRotation
 				return true;
 		}
 
-		if (!WoW.HasItem("Conjured Fresh Water")&& !WoW.HasItem("Conjured Water") && !WoW.HasItem("Conjured Glacier Water") && !WoW.HasItem("Conjured Mountain Spring Water") && !WoW.HasItem("Conjured Crystal Water") && !WoW.HasItem("Conjured Sparkling Water") && !WoW.HasItem("Conjured Mineral Water") && !WoW.HasItem("Conjured Spring Water") && !WoW.HasItem("Conjured Purified Water") && !WoW.HasItem("Conjured Mana Strudel"))
+		if (WoW.CanCast("Conjure Water")&& !WoW.HasItem("Conjured Fresh Water")&& !WoW.HasItem("Conjured Water") && !WoW.HasItem("Conjured Glacier Water") && !WoW.HasItem("Conjured Mountain Spring Water") && !WoW.HasItem("Conjured Crystal Water") && !WoW.HasItem("Conjured Sparkling Water") && !WoW.HasItem("Conjured Mineral Water") && !WoW.HasItem("Conjured Spring Water") && !WoW.HasItem("Conjured Purified Water") && !WoW.HasItem("Conjured Mana Strudel"))
 		{
 			Console.WriteLine("Conjuring Water");
 			if (WoW.Cast("Conjure Water"))

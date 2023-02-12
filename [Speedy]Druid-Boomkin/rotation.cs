@@ -78,17 +78,11 @@ internal class Rotation : IRotation
         }
 		
 	
-            if (WoW.CanCast("Force of Nature"))
+            if (WoW.CanCast("Force of Nature") && !WoW.SpellOnCooldown("Force of Nature"))
             {
-                if (WoW.SpellInRange("Force of Nature"))
-                {                  
-                    
-                    
-                    if (WoW.Cast("Force of Nature",Player.Position))
-                    {
-                        return true;
-                    }
-                }
+				Console.WriteLine("Casting Treants");
+                if (WoW.Trigger("Treants"))
+                return true;
             }
         
         

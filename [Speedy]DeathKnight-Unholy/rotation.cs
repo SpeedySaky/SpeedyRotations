@@ -28,18 +28,30 @@ internal class Rotation : IRotation
 		var Frost = WoW.FrostRunes();
 		var Death = WoW.DeathRunes();
         var TargetHealth = Target.HealthPercent;
+		var Pet = WoW.Pet;
 
-       if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.CanCast("Raise Dead"))
+		if (WoW.IsValid(Pet))
+		{
+			if (!Pet.Target.IsEmpty())
+			{
+			if (!Player.Target.IsEmpty())
+            WoW.StartPetAttack();
+			}
+			else
+			{
+			if (Player.IsInCombat || Player.PetInCombat)
+            if (!WoW.Pet.Target.Compare(Player.Target))
+                if (WoW.TryTarget(Pet.Target))
+                    return true;
+			}
+		}
+		if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.CanCast("Raise Dead"))
         {
             Console.WriteLine("Casting Raise Dead");
             if (WoW.Cast("Raise Dead"))
                 return true;
         }
-        if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
-            if (!WoW.Pet.Target.Compare(WoW.Me.Target))
-                if (WoW.Trigger("AssistPet"))
-                    if (WoW.Me.Target.Compare(WoW.Pet.Target))
-                        return true;
+		
         
 		
         if (WoW.CanCast("Death Pact") && WoW.IsValid(WoW.Pet) && Player.Health <= 10)
@@ -134,7 +146,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Mind Freeze"))
                 return true;
         }
-		if (WoW.CanCast("Obliterate") && Target.HasAura("Frost Fever")&& Target.HasAura("Blood Plague")&& Unholy>=1 && Frost>=1  || Death>=1 && Frost>=1|| Death>=1 && Unholy>=1)
+		if (WoW.CanCast("Obliterate") && Target.HasAura("Frost Fever")&& Target.HasAura("Blood Plague")&& Unholy>=1 && Frost>=1 && WoW.HostilesNearby(10, true, true) == 1 || Death>=1 && Frost>=1|| Death>=1 && Unholy>=1 && WoW.HostilesNearby(10, true, true) == 1)
         {
             Console.WriteLine("Casting Obliterate");
             if (WoW.Cast("Obliterate"))
@@ -174,7 +186,7 @@ internal class Rotation : IRotation
             return true;
         }              
         
-         if (Player.IsCasting && !Player.IsChanneling)
+         if (!Player.IsCasting && !Player.IsChanneling)
         {
             if (WoW.CanCast(DaD))
             {
@@ -208,8 +220,24 @@ internal class Rotation : IRotation
         if (Player.IsInCombat || Player.IsMoving) return false;
         if (Player.IsCasting || Player.IsChanneling) return false;
         if (Player.HasAura("Drink") || Player.HasAura("Food")) return false;
+		var Pet = WoW.Pet;
 
-        if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.CanCast("Raise Dead"))
+		if (WoW.IsValid(Pet))
+		{
+		if (!Pet.Target.IsEmpty())
+		{
+        if (!Player.Target.IsEmpty())
+            WoW.StartPetAttack();
+		}
+		else
+		{
+        if (Player.IsInCombat || Player.PetInCombat)
+            if (!Pet.Target.Compare(Player.Target))
+                if (WoW.TryTarget(Pet.Target))
+                    return true;
+		}
+        }
+		if (!WoW.IsValid(WoW.Pet) || WoW.Pet.IsDead && WoW.CanCast("Raise Dead"))
         {
             Console.WriteLine("Casting Raise Dead");
             if (WoW.Cast("Raise Dead"))
@@ -233,7 +261,8 @@ internal class Rotation : IRotation
             Console.WriteLine("Casting Unholy Presence");
             if (WoW.Cast("Unholy Presence"))
                 return true;
-        }if (!Target.IsDead || !Target.IsGhost) return true;
+        }
+		if (!Target.IsDead || !Target.IsGhost) return true;
         WoW.StartPetAttack();
 		if (WoW.CanCast("Death Grip"))
         {
@@ -249,3 +278,22 @@ internal class Rotation : IRotation
         return false;
     }
 }
+
+
+
+//var pet = WoW.Pet;
+//if (WoW.IsValid(pet))
+//{
+  //  if (pet.Target.Empty())
+    //{
+      //  if (!me.Target.Empty())
+      //      WoW.StartPetAttack();
+   // }
+   // else
+    //{
+      //  if (WoW.Me.IsInCombat || WoW.Me.PetInCombat)
+        //    if (!pet.Target.Compare(me.Target))
+          //    if (WoW.TryTarget(pet.Target))
+           //         return true;
+    //}
+//}

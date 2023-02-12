@@ -43,10 +43,14 @@ internal class Rotation : IRotation
                     return true;
 			}
 		}
-
+		
+		
+		
         
         if (Player.Target.ToString() == null && Pet.Target.ToString() != null)
         {
+			Console.WriteLine("Assisting Pet");
+			WoW.Trigger("AssistPet");
             WoW.TargetPet();
             WoW.AssistTarget();
         }
@@ -202,18 +206,13 @@ internal class Rotation : IRotation
 
         }
         
-        if (WoW.CanCast("Shadow Bolt") && !Player.IsCasting && TargetHealth >= 70 && Mana >= 50 && WoW.Me.Level < 12)
+        if (WoW.CanCast("Shadow Bolt") && !Player.IsCasting && TargetHealth >= 20 && Mana >= 50 )
         {
             Console.WriteLine("Casting Shadow Bolt");
             if (WoW.Cast("Shadow Bolt"))
                 return true;
         }
-		  if (WoW.CanCast("Shadow Bolt")&& WoW.Me.Level  < 5)
-        {
-            Console.WriteLine("Casting Shadow Bolt");
-            if (WoW.Cast("Shadow Bolt"))
-                return true;
-        }
+		
         if (WoW.CanCast("Shoot") && !Player.IsCasting && TargetHealth <20 || Mana <10)
         {
             Console.WriteLine("Casting Casting Shoot");

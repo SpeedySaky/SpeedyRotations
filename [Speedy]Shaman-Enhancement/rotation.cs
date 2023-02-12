@@ -85,7 +85,13 @@ internal class Rotation : IRotation
 		if (WoW.Target.IsDead || WoW.Target.IsGhost) return false;
 		var TargetDistance = Target.Position.Distance2D(Player.Position);
 		
-		if (WoW.CanCast("Healing Wave") && Health <= 60 && Mana > 5)
+		if (WoW.CanCast("Call of the Elements") && Mana > 20 &&  !WoW.IsActiveTotem("Stoneskin Totem III",false) && !WoW.IsActiveTotem("Stoneskin Totem IV",false)&&  !WoW.IsActiveTotem("Stoneskin Totem I",false)&&  !WoW.IsActiveTotem("Stoneskin Totem II",false)&&  !WoW.IsActiveTotem("Stoneskin Totem V",false) &&  !WoW.IsActiveTotem("Stoneskin Totem VI",false)&&  !WoW.IsActiveTotem("Stoneskin Totem VII",false)&&  !WoW.IsActiveTotem("Stoneskin Totem VIII",false)&&  !WoW.IsActiveTotem("Stoneskin Totem IX",false)&&  !WoW.IsActiveTotem("Stoneskin Totem X",false))
+		{
+			Console.WriteLine("Casting Call of The Elements");
+			if (WoW.Cast("Call of the Elements"))
+				return true;
+		}
+		if (WoW.CanCast("Healing Wave") && Health <= 40 && Mana > 5)
 		{
 			Console.WriteLine("Casting Healing Wave");
 			if (WoW.Cast("Healing Wave"))
@@ -120,7 +126,7 @@ internal class Rotation : IRotation
 				return true;
 		}
 
-		if (WoW.CanCast("Feral Spirit"))
+		if (WoW.CanCast("Feral Spirit") && (WoW.HostilesNearby(10, true, true) > 1) )
 		{
 			Console.WriteLine("Casting Feral Spirit");
 			if (WoW.Cast("Feral Spirit"))
@@ -132,34 +138,39 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Wind Shear"))
 				return true;
 		}
+		if (!Player.HasAura("Lightning Shield") && Mana > 10)
+		{
+			Console.WriteLine("Casting Lightning Shield");
+			if (WoW.Cast("Lightning Shield"))
+				return true;
+		}
+		//if (!WoW.IsActiveTotem("Stoneskin Totem", false) && !WoW.IsActiveTotem("Stoneskin Totem II", false) && !WoW.IsActiveTotem("Stoneskin Totem III", false) && !WoW.IsActiveTotem("Stoneskin Totem IV", false) && !WoW.IsActiveTotem("Stoneskin Totem V", false) && !WoW.IsActiveTotem("Stoneskin Totem VI", false) && !WoW.IsActiveTotem("Stoneskin Totem VII", false) && !WoW.IsActiveTotem("Stoneskin Totem VIII", false) && !WoW.IsActiveTotem("Stoneskin Totem IX", false) && !WoW.IsActiveTotem("Stoneskin Totem X", false) && !WoW.IsActiveTotem("Stoneclaw Totem", false) && !WoW.IsActiveTotem("Stoneclaw Totem II", false) && !WoW.IsActiveTotem("Stoneclaw Totem III", false) && !WoW.IsActiveTotem("Stoneclaw Totem IV", false) && !WoW.IsActiveTotem("Stoneclaw Totem V", false) && !WoW.IsActiveTotem("Stoneclaw Totem VI", false) && !WoW.IsActiveTotem("Stoneclaw Totem VII", false) && !WoW.IsActiveTotem("Stoneclaw Totem VIII", false) && !WoW.IsActiveTotem("Stoneclaw Totem IX", false) && !WoW.IsActiveTotem("Stoneclaw Totem X", false))
+		//{
+		//	Console.WriteLine("Casting Stoneskin Totem");
+		//	if (WoW.Cast("Stoneskin Totem"))
+		//		return true;
+		//}
+		//if (!WoW.IsActiveTotem("Searing Totem", false) && !WoW.IsActiveTotem("Searing Totem II", false) && !WoW.IsActiveTotem("Searing Totem III", false) && !WoW.IsActiveTotem("Searing Totem IV", false) && !WoW.IsActiveTotem("Searing Totem V", false) && !WoW.IsActiveTotem("Searing Totem VI", false) && //!WoW.IsActiveTotem("Searing Totem VII", false) && !WoW.IsActiveTotem("Searing Totem VIII", false) && !WoW.IsActiveTotem("Searing Totem IX", false) && !WoW.IsActiveTotem("Searing Totem X", false))
+		//{
+		//	Console.WriteLine("Casting Searing Totem");
+		//	if (WoW.Cast("Searing Totem"))
+		//		return true;
+		//}
+		//if (!WoW.IsActiveTotem("Searing Totem", false) && !WoW.IsActiveTotem("Searing Totem II", false) && !WoW.IsActiveTotem("Searing Totem III", false) && !WoW.IsActiveTotem("Searing Totem IV", false) && !WoW.IsActiveTotem("Searing Totem V", false) && !WoW.IsActiveTotem("Searing Totem VI", false) && //!WoW.IsActiveTotem("Searing Totem VII", false) && !WoW.IsActiveTotem("Searing Totem VIII", false) && !WoW.IsActiveTotem("Searing Totem IX", false) && !WoW.IsActiveTotem("Searing Totem X", false))
+		//{
+		//	Console.WriteLine("Casting Fire Nova");
+		//	if (WoW.Cast("Fire Nova"))
+		//		return true;
+		//}
 
-		if (!WoW.IsActiveTotem("Stoneskin Totem", false) && !WoW.IsActiveTotem("Stoneskin Totem II", false) && !WoW.IsActiveTotem("Stoneskin Totem III", false) && !WoW.IsActiveTotem("Stoneskin Totem IV", false) && !WoW.IsActiveTotem("Stoneskin Totem V", false) && !WoW.IsActiveTotem("Stoneskin Totem VI", false) && !WoW.IsActiveTotem("Stoneskin Totem VII", false) && !WoW.IsActiveTotem("Stoneskin Totem VIII", false) && !WoW.IsActiveTotem("Stoneskin Totem IX", false) && !WoW.IsActiveTotem("Stoneskin Totem X", false) && !WoW.IsActiveTotem("Stoneclaw Totem", false) && !WoW.IsActiveTotem("Stoneclaw Totem II", false) && !WoW.IsActiveTotem("Stoneclaw Totem III", false) && !WoW.IsActiveTotem("Stoneclaw Totem IV", false) && !WoW.IsActiveTotem("Stoneclaw Totem V", false) && !WoW.IsActiveTotem("Stoneclaw Totem VI", false) && !WoW.IsActiveTotem("Stoneclaw Totem VII", false) && !WoW.IsActiveTotem("Stoneclaw Totem VIII", false) && !WoW.IsActiveTotem("Stoneclaw Totem IX", false) && !WoW.IsActiveTotem("Stoneclaw Totem X", false))
-		{
-			Console.WriteLine("Casting Stoneskin Totem");
-			if (WoW.Cast("Stoneskin Totem"))
-				return true;
-		}
-		if (!WoW.IsActiveTotem("Searing Totem", false) && !WoW.IsActiveTotem("Searing Totem II", false) && !WoW.IsActiveTotem("Searing Totem III", false) && !WoW.IsActiveTotem("Searing Totem IV", false) && !WoW.IsActiveTotem("Searing Totem V", false) && !WoW.IsActiveTotem("Searing Totem VI", false) && !WoW.IsActiveTotem("Searing Totem VII", false) && !WoW.IsActiveTotem("Searing Totem VIII", false) && !WoW.IsActiveTotem("Searing Totem IX", false) && !WoW.IsActiveTotem("Searing Totem X", false))
-		{
-			Console.WriteLine("Casting Searing Totem");
-			if (WoW.Cast("Searing Totem"))
-				return true;
-		}
-		if (!WoW.IsActiveTotem("Searing Totem", false) && !WoW.IsActiveTotem("Searing Totem II", false) && !WoW.IsActiveTotem("Searing Totem III", false) && !WoW.IsActiveTotem("Searing Totem IV", false) && !WoW.IsActiveTotem("Searing Totem V", false) && !WoW.IsActiveTotem("Searing Totem VI", false) && !WoW.IsActiveTotem("Searing Totem VII", false) && !WoW.IsActiveTotem("Searing Totem VIII", false) && !WoW.IsActiveTotem("Searing Totem IX", false) && !WoW.IsActiveTotem("Searing Totem X", false))
-		{
-			Console.WriteLine("Casting Fire Nova");
-			if (WoW.Cast("Fire Nova"))
-				return true;
-		}
+		//if (WoW.HostilesNearby(10, true, true) >= 2 && !WoW.IsActiveTotem("Stoneclaw Totem", false) && !WoW.IsActiveTotem("Stoneclaw Totem II", false) && !WoW.IsActiveTotem("Stoneclaw Totem III", false) && !WoW.IsActiveTotem("Stoneclaw Totem IV", false) && !WoW.IsActiveTotem("Stoneclaw Totem V", false) && !WoW.IsActiveTotem("Stoneclaw Totem VI", false) && !WoW.IsActiveTotem("Stoneclaw Totem VII", false) && !WoW.IsActiveTotem("Stoneclaw Totem VIII", false) && !WoW.IsActiveTotem("Stoneclaw Totem IX", false) && !WoW.IsActiveTotem("Stoneclaw Totem X", false))
+		//{
+		//	Console.WriteLine("Casting Stoneclaw Totem");
+		//	if (WoW.Cast("Stoneclaw Totem"))
+		//		return true;
+		//}
 
-		if (WoW.HostilesNearby(10, true, true) >= 2 && !WoW.IsActiveTotem("Stoneclaw Totem", false) && !WoW.IsActiveTotem("Stoneclaw Totem II", false) && !WoW.IsActiveTotem("Stoneclaw Totem III", false) && !WoW.IsActiveTotem("Stoneclaw Totem IV", false) && !WoW.IsActiveTotem("Stoneclaw Totem V", false) && !WoW.IsActiveTotem("Stoneclaw Totem VI", false) && !WoW.IsActiveTotem("Stoneclaw Totem VII", false) && !WoW.IsActiveTotem("Stoneclaw Totem VIII", false) && !WoW.IsActiveTotem("Stoneclaw Totem IX", false) && !WoW.IsActiveTotem("Stoneclaw Totem X", false))
-		{
-			Console.WriteLine("Casting Stoneclaw Totem");
-			if (WoW.Cast("Stoneclaw Totem"))
-				return true;
-		}
-
-		if (WoW.CanCast("Flame Shock") && !Player.IsCasting && !Target.HasAura("Flame Shock") && TargetHealth >= 30)
+		if (WoW.CanCast("Flame Shock") && !Player.IsCasting && !Target.HasAura("Flame Shock") && TargetHealth >= 30 && Mana >= 20)
 		{
 			Console.WriteLine("Casting Flame Shock");
 			if (WoW.Cast("Flame Shock"))
@@ -213,7 +224,7 @@ internal class Rotation : IRotation
 		var auras = Player.Auras();
 		foreach (var aura in auras)
 		{
-			if (Dispels.Contains(WoW.C__Spell.Name(aura.SpellID)) && WoW.CanCast("Cure Disease") || WoW.SpellDispel(aura.SpellID) == uDispelType.Disease && WoW.CanCast("Cure Toxins") || WoW.SpellDispel(aura.SpellID) == uDispelType.Poison && WoW.CanCast("Cure Toxins"))
+			if (Dispels.Contains(WoW.C__Spell.Name(aura.SpellID)) && WoW.CanCast("Cure Toxins") || WoW.SpellDispel(aura.SpellID) == uDispelType.Disease && WoW.CanCast("Cure Toxins") || WoW.SpellDispel(aura.SpellID) == uDispelType.Poison && WoW.CanCast("Cure Toxins"))
 
 			{
 				Console.WriteLine("Casting Cure Toxins");
@@ -233,18 +244,11 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Lightning Shield"))
 				return true;
 		}
-		if (WoW.CanCast("Totemic Recall") && WoW.HasSpell("Totemic Recall") && WoW.IsActiveTotem("Stoneskin Totem", true) || WoW.IsActiveTotem("Searing Totem", true))
+		if (WoW.CanCast("Totemic Recall")  && WoW.IsActiveTotem("Stoneskin Totem IV",false) || WoW.IsActiveTotem("Stoneskin Totem II",false) || WoW.IsActiveTotem("Stoneskin Totem III",false))
 		{
 			Console.WriteLine("Casting Totemic Recall");
 		if (WoW.Cast("Totemic Recall"))
 		return true;
-		}
-
-		if (!WoW.HasEnchantment(uItemSlot.MainHand, "Windfury") && WoW.Me.Level >= 30 && Mana > 10 && WoW.CanCast("Windfury Weapon"))
-		{
-			Console.WriteLine("Casting Windfury Weapon");
-			if (WoW.Cast("Windfury Weapon"))
-				return true;
 		}
 		if (!WoW.HasEnchantment(uItemSlot.OffHand, "Flametongue") && WoW.Me.Level >= 40 && Mana > 10 && WoW.CanCast("Flametongue Weapon"))
 		{
@@ -252,6 +256,13 @@ internal class Rotation : IRotation
 			if (WoW.Cast("Flametongue Weapon"))
 				return true;
 		}
+		if (!WoW.HasEnchantment(uItemSlot.MainHand, "Windfury") && WoW.Me.Level >= 30 && Mana > 10 && WoW.CanCast("Windfury Weapon"))
+		{
+			Console.WriteLine("Casting Windfury Weapon");
+			if (WoW.Cast("Windfury Weapon"))
+				return true;
+		}
+		
 		if (!WoW.HasEnchantment(uItemSlot.MainHand, "Rockbiter") && Mana > 10 && WoW.CanCast("Rockbiter Weapon") && WoW.Me.Level < 30)
 		{
 			Console.WriteLine("Casting Rockbiter Weapon");
@@ -259,12 +270,12 @@ internal class Rotation : IRotation
 				return true;
 		}
 		if (Target.IsDead || Target.IsGhost) return false;
-		if (WoW.CanCast("Ghost Wolf") && !Player.HasAura("Ghost Wolf") && Mana > 50)
-		{
-			Console.WriteLine("Casting Ghost Wolf");
-			if (WoW.Cast("Ghost Wolf"))
-				return true;
-		}
+		//if (WoW.CanCast("Ghost Wolf") && !Player.HasAura("Ghost Wolf") && Mana > 50)
+		//{
+			//Console.WriteLine("Casting Ghost Wolf");
+			//if (WoW.Cast("Ghost Wolf"))
+				//return true;
+		//}
 	
 
 
