@@ -213,15 +213,9 @@ internal class Rotation : IRotation
                 return true;
         }
 
-        if (!Player.IsCasting && WoW.CanCast("Smite") && TargetHealth >= 70 && Mana >= 50 && !Player.HasAura("Shadowform"))
+        if (!Player.IsCasting && WoW.CanCast("Smite")&& !Player.HasAura("Shadowform") && WoW.Me.Level <= 20  && TargetHealth >= 50)
         {
             Console.WriteLine("Casting Smite");
-            if (WoW.Cast("Smite"))
-                return true;
-        }
-        if (!Player.IsCasting && WoW.CanCast("Smite") && Mana >= 10 && WoW.Me.Level <= 5)
-        {
-            Console.WriteLine("Casting Smite low lvl");
             if (WoW.Cast("Smite"))
                 return true;
         }

@@ -8,10 +8,11 @@ using Shadow_WoW.Warcraft;
 internal class Rotation : IRotation
 {
 
+
     public override void Initialize()
     {
-        QuickDelay = 350;
-        SlowDelay = 850;
+        QuickDelay = 150;
+        SlowDelay = 250;
     }
 
     public override bool InCombat()
@@ -58,7 +59,8 @@ internal class Rotation : IRotation
         WoW.StartPetAttack();
         // healing
 		
-		  if (!WoW.IsValid(WoW.Pet)&& WoW.HasSpell("Summon Felguard") && WoW.Me.Level >= 50|| WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10 && WoW.HasSpell("Summon Voidwalker"))
+		 
+        if (!WoW.IsValid(WoW.Pet)&& WoW.HasSpell("Summon Felguard") && WoW.Me.Level >= 50|| WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10 && WoW.HasSpell("Summon Voidwalker"))
         {
             			Console.WriteLine("Casting Summon Felguard");
 
@@ -69,7 +71,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Summon Voidwalker"))
                 return true;
         }
-        if (WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && !WoW.IsValid(WoW.Pet) || WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") &&WoW.Pet.IsDead && WoW.Me.Level <= 10)
+        if (!WoW.IsValid(WoW.Pet) &&WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && !Player.IsChanneling|| WoW.Pet.IsDead && WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && WoW.Me.Level <= 10 && !Player.IsChanneling)
         {
 							Console.WriteLine("Casting Summon Imp");
 
@@ -235,23 +237,26 @@ internal class Rotation : IRotation
         var Pet = WoW.Pet;
         var PetHealth = Pet.HealthPercent;
         var Target = WoW.Target;
-       
-		if (WoW.IsValid(Pet))
-		{
-			if (!Pet.Target.IsEmpty())
-			{
-			if (Player.Target.IsEmpty())
-            WoW.StartPetAttack();
-			}
-			else
-			{
-			if (Player.IsInCombat || Player.PetInCombat)
-            if (!WoW.Pet.Target.Compare(Player.Target))
-                if (WoW.TryTarget(Pet.Target))
-                    return true;
-			}
-		}
-		
+
+	   
+        if (!WoW.IsValid(WoW.Pet)&& WoW.HasSpell("Summon Felguard") && WoW.Me.Level >= 50|| WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10 && WoW.HasSpell("Summon Voidwalker"))
+        {
+            			Console.WriteLine("Casting Summon Felguard");
+
+            if (WoW.Cast("Summon Felguard")) ;
+            else
+                				Console.WriteLine("Casting Summon Voidwalker");
+
+            if (WoW.Cast("Summon Voidwalker"))
+                return true;
+        }
+        if (WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && !WoW.IsValid(WoW.Pet) || WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && WoW.Pet.IsDead && WoW.Me.Level <= 10)
+        {
+							Console.WriteLine("Casting Summon Imp");
+
+            if (WoW.Cast("Summon Imp"))
+                return true;
+        }
 		WoW.StartPetAttack();
 			if (!WoW.Pet.Target.IsEmpty() && WoW.Pet.IsInCombat)
           
@@ -306,24 +311,6 @@ internal class Rotation : IRotation
         }
 
 
-        if (!WoW.IsValid(WoW.Pet)&& WoW.HasSpell("Summon Felguard") && WoW.Me.Level >= 50|| WoW.Pet.IsDead && WoW.HasItem("Soul Shard") && WoW.Me.Level >= 10 && WoW.HasSpell("Summon Voidwalker"))
-        {
-            			Console.WriteLine("Casting Summon Felguard");
-
-            if (WoW.Cast("Summon Felguard")) ;
-            else
-                				Console.WriteLine("Casting Summon Voidwalker");
-
-            if (WoW.Cast("Summon Voidwalker"))
-                return true;
-        }
-        if (WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") && !WoW.IsValid(WoW.Pet) || WoW.CanCast("Summon Imp") && WoW.HasSpell("Summon Imp") &&WoW.Pet.IsDead && WoW.Me.Level <= 10)
-        {
-							Console.WriteLine("Casting Summon Imp");
-
-            if (WoW.Cast("Summon Imp"))
-                return true;
-        }
 
         if (WoW.CanCast("Create Healthstone") && !Player.IsCasting && WoW.HasItem("Soul Shard") && !WoW.HasItem("Minor Healthstone") && !WoW.HasItem("Lesser Healthstone") && !WoW.HasItem("Healthstone") && !WoW.HasItem("Greater Healthstone") && !WoW.HasItem("Major Healthstone") && !WoW.HasItem("Master Healthstone") && !WoW.HasItem("Demonic Healthstone") && !WoW.HasItem("Fel Healthstone"))
         {

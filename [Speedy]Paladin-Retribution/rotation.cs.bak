@@ -71,13 +71,7 @@ internal class Rotation : IRotation
 	"Storm Punch",
 	"Paralytic Poison",
 	"Poison",
-	"Boiling Blood",
-	"Leech Poison",
-	"Plague Cloud",
-	"Venom Sting",
-	"Slowing Poison",
-	"Venomhide Poison",
-	"Bloodpetal Poison",
+	"Boiling Blood"
 };
     public override bool InCombat()
     {
@@ -100,7 +94,7 @@ internal class Rotation : IRotation
             }
         }
 
-        if (WoW.HasSpell("Retribution Aura") && !Player.HasAura("Retribution Aura")  )
+        if (WoW.HasSpell("Retribution Aura") && !Player.HasAura("Retribution Aura") && !Player.HasAura("Devotion Aura") )
         {
             Console.WriteLine("Casting Retribution Aura");
             if (WoW.Cast("Retribution Aura")) ;
@@ -130,6 +124,10 @@ internal class Rotation : IRotation
         {
             Console.WriteLine("Casting Blessing of Might");
             if (WoW.Cast("Blessing of Might")) ;
+            else
+                Console.WriteLine("Casting Blessing of Wisdom");
+            if (WoW.Cast("Blessing of Wisdom")) ;
+
             return true;
         }
         if (WoW.CanCast("Flash of Light") && Player.HasAura(59578) && Health < 75 || WoW.CanCast("Flash of Light")  && Player.HasAura(53489) && Health < 75)
@@ -196,7 +194,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Seal of Righteousness")) 
 			    return true;
         }
-        if (WoW.CanCast("Judgement of Light") && !Target.HasAura("Judgement of Light") &&  !WoW.HasSpell("Judgement of Wisdom"))
+        if (WoW.CanCast("Judgement of Light") && !Target.HasAura("Judgement of Light") &&  WoW.Me.Level <= 12)
         {
             Console.WriteLine("Casting Judgement of Light");
             if (WoW.Cast("Judgement of Light")) ;
@@ -233,12 +231,6 @@ internal class Rotation : IRotation
         {
             Console.WriteLine("Casting Holy Wrath");
             if (WoW.Cast("Holy Wrath"))
-                return true;
-        }
-		if (WoW.CanCast("Hand of Reckoning") )
-        {
-            Console.WriteLine("Hand of Reckoning");
-            if (WoW.Cast("Hand of Reckoning"))
                 return true;
         }
         if (WoW.CanCast("Hammer of Wrath") && TargetHealth <= 20)

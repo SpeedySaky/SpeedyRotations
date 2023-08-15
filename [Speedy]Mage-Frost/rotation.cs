@@ -15,8 +15,8 @@ internal class Rotation : IRotation
 	public override void Initialize()
 
 	{
-		QuickDelay = 50;
-		SlowDelay = 200;
+		QuickDelay = 250;
+		SlowDelay = 600;
 	}
 
 	public override bool InCombat()
@@ -245,7 +245,7 @@ internal class Rotation : IRotation
 				return true;
 		}
 
-		if (WoW.CanCast("Conjure Water")&& !WoW.HasItem("Conjured Fresh Water")&& !WoW.HasItem("Conjured Water") && !WoW.HasItem("Conjured Glacier Water") && !WoW.HasItem("Conjured Mountain Spring Water") && !WoW.HasItem("Conjured Crystal Water") && !WoW.HasItem("Conjured Sparkling Water") && !WoW.HasItem("Conjured Mineral Water") && !WoW.HasItem("Conjured Spring Water") && !WoW.HasItem("Conjured Purified Water") && !WoW.HasItem("Conjured Mana Strudel"))
+		if (WoW.CanCast("Conjure Water") && !WoW.HasItem("Conjured Fresh Water") && !WoW.HasItem("Conjured Water") && !WoW.HasItem("Conjured Glacier Water") && !WoW.HasItem("Conjured Mountain Spring Water") && !WoW.HasItem("Conjured Crystal Water") && !WoW.HasItem("Conjured Sparkling Water") && !WoW.HasItem("Conjured Mineral Water") && !WoW.HasItem("Conjured Spring Water") && !WoW.HasItem("Conjured Purified Water") && !WoW.HasItem("Conjured Mana Strudel"))
 		{
 			Console.WriteLine("Conjuring Water");
 			if (WoW.Cast("Conjure Water"))

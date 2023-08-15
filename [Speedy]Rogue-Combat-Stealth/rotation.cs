@@ -87,7 +87,7 @@ internal class Rotation : IRotation
                 return true;
         }
 
-        if (WoW.CanCast("Expose Armor") && !Target.HasAura("Expose Armor") && Combo >= 2 && Energy >= 25)
+        if (WoW.CanCast("Expose Armor") && !Target.HasAura("Expose Armor") && Combo >= 2 && Energy >= 25 && TargetHealth>35)
         {
             Console.WriteLine("Casting Expose Armor");
             if (WoW.Cast("Expose Armor"))

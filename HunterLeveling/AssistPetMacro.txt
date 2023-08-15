@@ -1,0 +1,11 @@
+Create macro in CHARACTER SPECIFIC macro
+
+macro name : AssistPet
+
+macro code:
+/target pettarget
+/startattack
+
+Click Save macro
+
+Reload UI

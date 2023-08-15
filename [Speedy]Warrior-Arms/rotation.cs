@@ -38,10 +38,10 @@ internal class Rotation : IRotation
             if (WoW.Cast("Victory Rush"))             
                 return true;
         }
-        if (WoW.CanCast("Berseker Stance") && !Player.HasAura("Berserker Stance"))
+        if (WoW.CanCast("Berserker Stance") && !Player.HasAura("Berserker Stance"))
         {
-            Console.WriteLine("Casting Berseker Stance");
-            if (WoW.Cast("Berseker Stance"))
+            Console.WriteLine("Casting Berserker Stance");
+            if (WoW.Cast("Berserker Stance"))
                 return true;
         }
         if (Target.IsCasting && WoW.CanCast("Pummel") && Player.HasAura("Berserker Stance"))
@@ -81,35 +81,55 @@ internal class Rotation : IRotation
             if (WoW.Cast("Demoralizing Shout"))
                 return true;
         }
+		 if (WoW.UnitsFightingMe() >= 3 && WoW.CanCast("Retaliation"))
+        {
+            Console.WriteLine("Casting Retaliation");
+            if (WoW.Cast("Retaliation"))
+                return true;
+        }
         if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Thunder Clap") && !Target.HasAura("Thunder Clap") && Rage >= 20)
         {
             Console.WriteLine("Casting Thunder Clap");
             if (WoW.Cast("Thunder Clap"))
                 return true;
         }
-        if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Cleave") && Target.HasAura("Thunder Clap") && Rage >= 20)
+       
+		if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Bladestorm") && Target.HasAura("Thunder Clap") && Rage >= 25)
         {
-            Console.WriteLine("Casting Cleave");
-            if (WoW.Cast("Cleave"))
+            Console.WriteLine("Bladestorm");
+            if (WoW.Cast("Bladestorm"))
                 return true;
         }
-        if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Sweeping Strikes"))
+        if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Sweeping Strikes") && Target.HasAura("Thunder Clap") && Rage >= 30)
         {
             Console.WriteLine("Casting Sweeping Strikes");
             if (WoW.Cast("Sweeping Strikes"))
                 return true;
         }
-        if (WoW.UnitsFightingMe() >= 3 && WoW.CanCast("Retaliation"))
+		 if (WoW.UnitsFightingMe() >= 2 && WoW.CanCast("Cleave") && Target.HasAura("Thunder Clap") && Rage >= 20)
         {
-            Console.WriteLine("Casting Retaliation");
-            if (WoW.Cast("Retaliation"))
+            Console.WriteLine("Casting Cleave");
+            if (WoW.Cast("Cleave"))
                 return true;
         }
+        
         if (WoW.CanCast("Rend") && !Target.HasAura("Rend") && Rage >= 10)
         {
             Console.WriteLine("Casting Rend");
             if (WoW.Cast("Rend"))
                 return true;
+        }
+		 if (WoW.CanCast("Mortal Strike") && Rage >= 30)
+        {
+            Console.WriteLine("Casting Mortal Strike");
+            if (WoW.Cast("Mortal Strike"))
+                return true;
+        }
+		if (WoW.CanCast("Overpower") && Rage >= 15 && Player.HasAura("Taste for Blood")  )
+        {
+            Console.WriteLine("Casting Overpower");
+            if (WoW.Cast("Overpower"));
+            return true;
         }
         if (WoW.CanCast("Hamstring") && !Target.HasAura("Hamstring") && Rage >= 10)
         {
@@ -117,14 +137,7 @@ internal class Rotation : IRotation
             if (WoW.Cast("Hamstring"))
                 return true;
         }
-
-
-        if (WoW.CanCast("Mortal Strike") && Rage >= 30)
-        {
-            Console.WriteLine("Casting Mortal Strike");
-            if (WoW.Cast("Mortal Strike"))
-                return true;
-        }
+      
         if (WoW.CanCast("Heroic Strike") && Rage >= 15)
         {
             Console.WriteLine("Casting Heroic Strike");
@@ -132,18 +145,6 @@ internal class Rotation : IRotation
                 return true;
         }
        
-
-        if (WoW.CanCast("Overpower") && Rage >= 15)
-        {
-            Console.WriteLine("Casting Overpower");
-            if (WoW.Cast("Overpower") && Rage >= 5) ;
-            else
-            if (WoW.Cast("Heroic Strike"))
-                return true;
-        }
-
-
-
         return false;
     }
 
